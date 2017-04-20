@@ -16,6 +16,7 @@ class FactionEditController:
         self.faction_ui = FactionEditUI.FactionEditUI(self, faction.name, faction.hp, faction.force, faction.cunning,
                                                       faction.wealth, faction.fac_creds, faction.homeworld)
         self.asset_window = None
+        self.show_assets()
 
     def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, homeworld):
         self.cur_faction.name = new_name
@@ -46,10 +47,20 @@ class FactionEditController:
 
     def acquire_asset(self, asset_name, location, ignore_cost):
         star, planet = location.split(' - ')
-        base_asset = self.asset_db.query(name=asset_name)
-        self.cur_faction.add_new_asset(star, planet, base_asset[0])
+        base_asset = self.asset_db.query(name=asset_name)[0]
         if not ignore_cost:
-            pass
+            if base_asset.cost <= int(self.cur_faction.fac_creds):
+                self.cur_faction.add_new_asset(star, planet, base_asset)
+                self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
+                self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds, self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,  self.cur_faction.homeworld)
+                print('Asset with cost')
+            else:
+                #TODO:Raise graphical error for user
+                print("Not enough facCreds")
+        else:
+            print('Asset without cost')
+            self.cur_faction.add_new_asset(star, planet, base_asset)
+        self.show_assets()
 
     def get_asset_world_list(self):
         """Returns list of planets on sector where current faction can acquire assets followed by rest of the worlds"""
@@ -57,3 +68,11 @@ class FactionEditController:
         occupied_planets = list(self.cur_faction.get_occupied_planets())
         planets = sorted(list(set(occupied_planets) ^ set(planets)))
         return occupied_planets + [SEPARATOR] + planets
+
+    def show_assets(self):
+        self.faction_ui.empty_table()
+        for asset_instance in self.cur_faction.assets:
+            base_asset = asset_instance.base_asset
+            self.faction_ui.show_asset(base_asset.name, base_asset.asset_class, asset_instance.cur_hp,
+                                       base_asset.cost, base_asset.tl, base_asset.type, base_asset.attack,
+                                       base_asset.counterattack, base_asset.special, asset_instance.get_location())

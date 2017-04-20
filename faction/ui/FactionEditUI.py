@@ -42,14 +42,13 @@ class FactionEditUI:
 
         self.set_fields(name, hp, fcreds, force, cunning, wealth, homeworld)
 
-        # TODO: Implement faction assets
         tk.Button(main_frame, text='Buy Assets', command=self.open_asset_window).grid(column=6, row=1)
 
         tk.Label(main_frame, text='Assets:').grid(column=0, row=6)
         self.asset_table = ttk.Treeview(main_frame,
                                         columns=['Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack',
-                                                 'special'])
-        for id in ['Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special']:
+                                                 'special', 'Location'])
+        for id in ['Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special', 'Location']:
             self.asset_table.column(id, width=75, anchor='center')
             self.asset_table.heading(id, text=id)
         self.asset_table['show'] = 'headings'
@@ -59,21 +58,24 @@ class FactionEditUI:
         table_scroll.config(command=self.asset_table.yview)
         self.asset_table.config(yscrollcommand=table_scroll.set)
 
-        # GUI for buying assets
-
-
         # Buttons for accepting/cancelling edits and deleting faction
         tk.Button(main_frame, text="Save", command=self.save_faction).grid(column=0, row=8)
         tk.Button(main_frame, text="Cancel", command=self.close).grid(column=1, row=8)
         tk.Button(main_frame, text="Delete Faction", command=self.delete_faction).grid(column=2, row=8)
 
     def set_fields(self, name='', hp='', fcreds='', force='', cunning='', wealth='', homeworld='\n'):
-        '''Sets values inserted in ui'''
+        """Sets values inserted in ui"""
+        self.name_entry.delete(0, tk.END)
         self.name_entry.insert(tk.END, name)
+        self.hp_entry.delete(0, tk.END)
         self.hp_entry.insert(tk.END, hp)
+        self.fcred_entry.delete(0, tk.END)
         self.fcred_entry.insert(tk.END, fcreds)
+        self.force_entry.delete(0, tk.END)
         self.force_entry.insert(tk.END, force)
+        self.cunning_entry.delete(0, tk.END)
         self.cunning_entry.insert(tk.END, cunning)
+        self.wealth_entry.delete(0, tk.END)
         self.wealth_entry.insert(tk.END, wealth)
         print(homeworld)
         for i, planet_name in enumerate(self.controller.faction_controller.get_alphabetical_planet_list()):
@@ -96,3 +98,9 @@ class FactionEditUI:
 
     def open_asset_window(self):
         self.controller.create_asset_window()
+
+    def show_asset(self, name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special, location):
+        self.asset_table.insert('', 'end', values=[name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special, location])
+
+    def empty_table(self):
+        self.asset_table.delete(*self.asset_table.get_children())
