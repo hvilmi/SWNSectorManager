@@ -1,0 +1,105 @@
+{
+    "factions": [
+        {
+            "cunning": "0",
+            "fac_creds": "0",
+            "force": "0",
+            "homeworld": "NewStar - TestiPlaneetta",
+            "hp": "",
+            "name": "TestFaction",
+            "wealth": "0",
+            "xp": 0
+        },
+        {
+            "cunning": "0",
+            "fac_creds": "0",
+            "force": "9",
+            "homeworld": "Syrj\u00e4inen - Kiert\u00e4v\u00e4",
+            "hp": "0",
+            "name": "Kokkelivekkulit",
+            "wealth": "0",
+            "xp": 0
+        }
+    ],
+    "name": "",
+    "stars": [
+        {
+            "coord": [
+                2,
+                0
+            ],
+            "name": "Star1",
+            "planets": [
+                {
+                    "desc": "\n",
+                    "name": "Planet1",
+                    "pop": "",
+                    "tags": [],
+                    "tl": ""
+                }
+            ]
+        },
+        {
+            "coord": [
+                3,
+                2
+            ],
+            "name": "Star2",
+            "planets": [
+                {
+                    "desc": "\n",
+                    "name": "Planet2",
+                    "pop": "",
+                    "tags": [],
+                    "tl": ""
+                }
+            ]
+        },
+        {
+            "coord": [
+                4,
+                2
+            ],
+            "name": "NewStar",
+            "planets": [
+                {
+                    "desc": "\n",
+                    "name": "TestiPlaneetta",
+                    "pop": "",
+                    "tags": [],
+                    "tl": ""
+                }
+            ]
+        },
+        {
+            "coord": [
+                5,
+                8
+            ],
+            "name": "Syrj\u00e4inen",
+            "planets": [
+                {
+                    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet efficitur ante. Nam id odio nisl. Donec porta tempus augue, id porttitor dui auctor a. Nunc ultrices semper dui, porttitor tempor sem cursus viverra. Mauris laoreet pellentesque ipsum, malesuada ultricies nunc posuere blandit. Donec scelerisque consectetur justo. Sed vitae maximus mauris. Nunc et consectetur orci. Nullam nec ultricies libero, eget tempor dolor.\n\nMaecenas id euismod nisi, nec interdum diam. Mauris congue sapien id sem vestibulum, non commodo eros porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec posuere orci nec arcu consequat, non dignissim est blandit. Quisque aliquet diam augue, eget scelerisque odio consectetur in. Ut semper eu dolor nec varius. Etiam lacus dolor, congue quis euismod ut, finibus vel ligula. Quisque arcu ex, gravida non mattis ac, convallis id nisi. Nullam non fermentum erat. Nulla sodales tellus diam, at pharetra sapien dictum sit amet. Nulla varius dui magna, eu efficitur nisl blandit in. Vestibulum convallis finibus vestibulum. Vestibulum ac vulputate magna. \n\n\n",
+                    "name": "Kiert\u00e4v\u00e4",
+                    "pop": "1",
+                    "tags": [
+                        "tag1",
+                        "tag2",
+                        "tag3",
+                        "tag4"
+                    ],
+                    "tl": "0"
+                },
+                {
+                    "desc": "asd\n'dsa\nad\n",
+                    "name": "Planeetta2",
+                    "pop": "500",
+                    "tags": [
+                        "TagTag"
+                    ],
+                    "tl": "2"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>4463b178-ea15-4bb2-b444-b6ccf9edbb43</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>SWN_Sector_Manager.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>E:\Programming\Python\SWN Sector Manager\SWN Sector Manager</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>SWN Sector Manager</Name>
+    <RootNamespace>SWN Sector Manager</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>3.5</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="faction\assets\AssetInstance.py" />
+    <Compile Include="faction\assets\Asset.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\assets\AssetContainer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\assets\AssetDatabase.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseController.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\Faction.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\FactionController.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\FactionEditController.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\assets\ui\AssetBuyingUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\ui\FactionEditUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sectorUI\FactionTreeViewUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="faction\ui\NewFactionUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sectorUI\StarEditorUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SectorController.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sectorUI\SectorManagerUI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StarSystem.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Planet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWN_Sector_Manager.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="faction\assets\" />
+    <Folder Include="faction\" />
+    <Folder Include="faction\assets\ui\" />
+    <Folder Include="faction\ui\" />
+    <Folder Include="sectorUI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\3.5" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
+  <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
