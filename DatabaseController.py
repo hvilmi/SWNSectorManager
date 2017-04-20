@@ -3,10 +3,10 @@ import Sector
 from tkinter import filedialog
 import json
 import faction.Faction as Faction
+from faction.assets import AssetDatabase
 
 
 class DatabaseController:
-
     def __init__(self, path):
         self.sector = Sector.Sector()
         self.factions = []
@@ -14,13 +14,13 @@ class DatabaseController:
         '''Reads files in a given directory and stores info in Sector class'''
         self.path = ''
 
-
     def read_stars(self, path):
 
         f = open(path, 'r')
 
         self.sector.clear()
         self.factions = []
+        asset_db = AssetDatabase.AssetDatabase()
 
         try:
             sector_dict = json.load(f)
@@ -32,14 +32,16 @@ class DatabaseController:
                     new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'])
                 self.sector.add_star(new_star)
             for faction in sector_dict['factions']:
-                self.factions.append(Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'], faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
+                self.factions.append(
+                    Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
+                                    faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
+                for asset in faction['assets']:
+                    self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
+                                                asset_db.query(name=asset['name'])[0])
+
         except json.JSONDecodeError as e:
-            print("Sector Decoding error: "+str(e))
-        print('all the stars', self.sector.stars)
-        print('all the factions', self.factions)
+            print("Sector Decoding error: " + str(e))
         f.close()
-
-
 
     def get_sector(self):
         return self.sector
@@ -55,27 +57,28 @@ class DatabaseController:
 
     def save_sector(self):
         if self.path != '':
-            #This part erases previous contents of the .sector file
+            # This part erases previous contents of the .sector file
             f = open(self.path, 'w')
             f.close()
-            #---------#
-            sector_dict = {'name':self.sector.get_name(), 'stars':[], 'factions':[]}
+            # ---------#
+            sector_dict = {'name': self.sector.get_name(), 'stars': [], 'factions': []}
             with open(self.path, 'w') as f:
                 for star in self.sector.get_stars():
-                    star_dict = {'name':None, 'coord':None, 'planets':[]}
-                    star_dict['name'] = star.get_name()
-                    star_dict['coord'] = star.get_coord()
+                    star_dict = {'name': star.get_name(), 'coord': star.get_coord(), 'planets': []}
                     for planet in star.get_planets():
-                        planet_dict = {'name':planet.get_name(), 'pop':planet.get_pop(), 'tags':planet.get_tags(), 'tl':planet.get_tl(), 'desc':planet.get_desc()}
+                        planet_dict = {'name': planet.get_name(), 'pop': planet.get_pop(), 'tags': planet.get_tags(),
+                                       'tl': planet.get_tl(), 'desc': planet.get_desc()}
                         star_dict['planets'].append(planet_dict)
                     sector_dict['stars'].append(star_dict)
                 for faction in self.factions:
-                    faction_dict = {'name':faction.name, 'hp':faction.hp, 'force':faction.force, 'cunning':faction.cunning, 'wealth':faction.wealth, 'fac_creds':faction.fac_creds, 'xp':faction.xp, 'homeworld':faction.homeworld}
+                    faction_dict = {'name': faction.name, 'hp': faction.hp, 'force': faction.force,
+                                    'cunning': faction.cunning, 'wealth': faction.wealth,
+                                    'fac_creds': faction.fac_creds, 'xp': faction.xp, 'homeworld': faction.homeworld,
+                                    'assets': []}
+                    for asset in faction.assets:
+                        faction_dict['assets'].append(
+                            {'name': asset.get_name(), 'star': asset.star, 'planet': asset.planet,
+                             'cur_hp': asset.cur_hp})
+                        print(faction_dict['assets'][-1])
                     sector_dict['factions'].append(faction_dict)
-                print('--------\n Factions when saving')
-                print(self.factions)
                 json.dump(sector_dict, f, sort_keys=True, indent=4)
-
-
-        
-

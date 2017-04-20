@@ -19,8 +19,11 @@ class Faction:
         return levels[string]
 
     def add_new_asset(self, star, planet, base_asset: Asset.Asset):
-        print(base_asset)
         new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet)
+        self.assets.append(new_asset)
+
+    def add_asset(self, star, planet, cur_hp, base_asset):
+        new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet)
         self.assets.append(new_asset)
 
     def get_occupied_planets(self):

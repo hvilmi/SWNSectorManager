@@ -1,6 +1,7 @@
 {
     "factions": [
         {
+            "assets": [],
             "cunning": "0",
             "fac_creds": "0",
             "force": "0",
@@ -11,6 +12,26 @@
             "xp": 0
         },
         {
+            "assets": [
+                {
+                    "cur_hp": 4,
+                    "name": "Hardened Personnel",
+                    "planet": "Planet1",
+                    "star": "Star1"
+                },
+                {
+                    "cur_hp": 6,
+                    "name": "Guerrilla Populace",
+                    "planet": "Planet1",
+                    "star": "Star1"
+                },
+                {
+                    "cur_hp": 1,
+                    "name": "Hitmen",
+                    "planet": "Planet1",
+                    "star": "Star1"
+                }
+            ],
             "cunning": "0",
             "fac_creds": "0",
             "force": "9",
