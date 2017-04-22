@@ -30,4 +30,5 @@ class Faction:
         locations = []
         for asset_instance in self.assets:
             locations.append(asset_instance.get_location())
-        return locations
+        # Convert list of asset locations to a set and back to list to remove duplicates
+        return list(set(locations))

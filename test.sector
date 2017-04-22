@@ -14,10 +14,10 @@
         {
             "assets": [
                 {
-                    "cur_hp": 4,
+                    "cur_hp": "4",
                     "name": "Hardened Personnel",
-                    "planet": "Planet1",
-                    "star": "Star1"
+                    "planet": "TestiPlaneetta",
+                    "star": "NewStar"
                 },
                 {
                     "cur_hp": 6,

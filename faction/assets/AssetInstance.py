@@ -17,3 +17,9 @@ class AssetInstance:
 
     def get_location(self):
         return self.star + " - " + self.planet
+
+    def set_location(self, location):
+        """location is a string in format '<Star> - <Planet>'"""
+        star, planet = location.split(' - ')
+        self.star = star
+        self.planet = planet

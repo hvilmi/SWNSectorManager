@@ -18,6 +18,8 @@ class FactionEditController:
         self.asset_window = None
         self.show_assets()
 
+        self.cur_asset = None
+
     def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, homeworld):
         self.cur_faction.name = new_name
         self.cur_faction.hp = new_hp
@@ -52,10 +54,12 @@ class FactionEditController:
             if base_asset.cost <= int(self.cur_faction.fac_creds):
                 self.cur_faction.add_new_asset(star, planet, base_asset)
                 self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
-                self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds, self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,  self.cur_faction.homeworld)
+                self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds,
+                                           self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,
+                                           self.cur_faction.homeworld)
                 print('Asset with cost')
             else:
-                #TODO:Raise graphical error for user
+                # TODO:Raise graphical error for user
                 print("Not enough facCreds")
         else:
             print('Asset without cost')
@@ -76,3 +80,13 @@ class FactionEditController:
             self.faction_ui.show_asset(base_asset.name, base_asset.asset_class, asset_instance.cur_hp,
                                        base_asset.cost, base_asset.tl, base_asset.type, base_asset.attack,
                                        base_asset.counterattack, base_asset.special, asset_instance.get_location())
+
+    def asset_chosen(self, index):
+        chosen_asset = self.cur_faction.assets[index]
+        self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp)
+        self.cur_asset = chosen_asset
+
+    def modify_asset(self, hp, location):
+        self.cur_asset.cur_hp = hp
+        self.cur_asset.set_location(location)
+        self.show_assets()

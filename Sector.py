@@ -30,11 +30,13 @@ class Sector:
         self.name = ''
 
     def get_alphabetical_planet_list(self):
-        '''Returns list of all current planets in alphabetical order. Every entry is in format "<Star> - <Planet>" '''
+        """Returns list of all current planets in alphabetical order. Every entry is in format "<Star> - <Planet>" """
         planet_list = []
         for star in self.stars:
             for planet in star.get_planets():
                 planet_list.append(star.get_name() +" - "+ planet.get_name())
+        if len(planet_list) == 0:
+            planet_list = [""]
         return sorted(planet_list, key=str.lower)
 
     def get_planet_by_name(self, name):

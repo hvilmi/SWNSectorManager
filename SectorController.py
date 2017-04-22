@@ -28,6 +28,7 @@ class SectorController:
                                              planet.get_tl())
 
     def show_stars_on_ui(self):
+        self.mainUI.make_sector_grid()
         for star in self.sector.get_stars():
             self.mainUI.place_star_on_map(star.get_name(), star.get_coord())
 
@@ -64,7 +65,7 @@ class SectorController:
         self.show_stars_on_ui()
 
     def save_sector_to_file(self):
-        self.db_control.save_sector()
+        result = self.db_control.save_sector()
 
     def create_new_star(self, name, coord):
         new_star = StarSystem.StarSystem(name, coord)
@@ -77,3 +78,11 @@ class SectorController:
 
     def get_sector(self):
         return self.sector
+
+    def create_new_sector(self):
+        self.sector.clear()
+        self.faction_controller.clear()
+        self.mainUI.make_sector_grid()
+
+    def save_sector_new_file(self):
+        result = self.db_control.save_sector(new_file=True)

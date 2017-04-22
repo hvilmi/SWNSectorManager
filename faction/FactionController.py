@@ -44,5 +44,9 @@ class FactionController:
         if type(faction) == type(Faction.Faction('name', 0, 0, 0, 0, 0, 0, 'example planet')):
             self.factions.remove(faction)
         elif type(faction) == type('examplestring'):
-            self.factions.remove(get_faction_by_name(faction))
+            self.factions.remove(self.get_faction_by_name(faction))
         self.display_factions()
+
+    def clear(self):
+        self.factions = []
+        self.faction_treeview.clear_factions()

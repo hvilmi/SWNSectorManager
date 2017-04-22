@@ -17,8 +17,6 @@ class AssetDatabase:
 
         assets = {}
         for asset in temp_dict:
-            print('current asset ----')
-            print(asset)
             new_asset = Asset.Asset(asset['name'], asset['type'], asset['hp'], asset['cost'], asset['tl'],
                                     asset['asset_class'], asset['attack'], asset['counterattack'], asset['special'])
             self.asset_dict[asset['name']] = new_asset
