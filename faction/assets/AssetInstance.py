@@ -2,7 +2,9 @@ from .Asset import Asset
 
 
 class AssetInstance:
-    def __init__(self, base_asset, cur_hp=None, star=None, planet=None):
+    cur_index = 0
+
+    def __init__(self, base_asset, cur_hp, star, planet, index):
         """
 
         :type base_asset: Asset
@@ -11,6 +13,7 @@ class AssetInstance:
         self.base_asset = base_asset
         self.star = star
         self.planet = planet
+        self.index = index
 
     def get_name(self):
         return self.base_asset.get_name()

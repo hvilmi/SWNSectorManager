@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import sectorUI.treeviewsort as tvsort
 
 
 class AssetBuyingUI:
@@ -32,15 +33,16 @@ class AssetBuyingUI:
         tk.OptionMenu(main_frame, self.world_selection, *self.parent.get_asset_world_list()).grid(row=12, column=1)
         self.world_selection.set(self.parent.get_asset_world_list()[0])
 
-    def create_asset_table(self, parent_nb, asset_type):
+    @staticmethod
+    def create_asset_table(parent_nb, asset_type):
 
         new_frame = tk.Frame(parent_nb)
         parent_nb.add(new_frame, text=asset_type)
 
-        asset_table = ttk.Treeview(new_frame,
-                                   columns=['Name', 'Level', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack',
-                                            'special'])
-        for id in ['Name', 'Level', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special']:
+        asset_columns = ['Name', 'Level', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special']
+        asset_table = ttk.Treeview(new_frame, columns=asset_columns)
+        tvsort.make_treeview_sortable(asset_table, asset_columns)
+        for id in asset_columns:
             asset_table.column(id, width=75, anchor='center')
             asset_table.heading(id, text=id)
         asset_table['show'] = 'headings'
@@ -56,8 +58,10 @@ class AssetBuyingUI:
         cur_table.delete(*cur_table.get_children())
 
         for asset in assets:
-            cur_table.insert('', 'end', values=[asset.name, asset.type, asset.max_hp, asset.cost, asset.tl, asset.type,
-                                                asset.attack, asset.counterattack, asset.special])
+            # Asset has special cost, hp or tech level
+            cur_table.insert('', 'end', values=[asset.name, asset.type, asset.max_hp, asset.cost,
+                                                asset.tl, asset.type, asset.attack, asset.counterattack,
+                                                asset.special])
 
     def bring_to_front(self):
         self.top_level.lift()

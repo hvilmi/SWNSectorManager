@@ -136,8 +136,10 @@ class MainUI:
         if self.mapCanvas.find_withtag(CURRENT):
             self.parent.star_system_selected(self.get_coord_by_id(self.mapCanvas.find_withtag(CURRENT)[0] - 1))
 
-    def show_planet_info(self, name='asd', pop='12', desc='asdfasdf', tags=['as', 'ds'], tl=4):
+    def show_planet_info(self, name, pop, desc, tags=None, tl=4):
 
+        if tags is None:
+            tags = ['']
         planet_frame = Frame(self.planet_NB)
         self.planet_NB.add(planet_frame, text=name, sticky=NSEW)
 

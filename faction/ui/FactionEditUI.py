@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import sectorUI.treeviewsort as tvsort
 
 
 class FactionEditUI:
@@ -44,11 +45,11 @@ class FactionEditUI:
 
         tk.Button(main_frame, text='Buy Assets', command=self.open_asset_window).grid(column=6, row=1)
 
+        asset_columns = ('Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special', 'Location')
         tk.Label(main_frame, text='Assets:').grid(column=0, row=6)
-        self.asset_table = ttk.Treeview(main_frame,
-                                        columns=['Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack',
-                                                 'special', 'Location'])
-        for id in ['Name', 'Class', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special', 'Location']:
+        self.asset_table = ttk.Treeview(main_frame, columns=asset_columns)
+        tvsort.make_treeview_sortable(self.asset_table, asset_columns)
+        for id in asset_columns:
             self.asset_table.column(id, width=75, anchor='center')
             self.asset_table.heading(id, text=id)
         self.asset_table['show'] = 'headings'
@@ -127,6 +128,7 @@ class FactionEditUI:
         self.asset_table.insert('', 'end',
                                 values=[name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special,
                                         location])
+        return self.asset_table.get_children()[-1]
 
     def empty_table(self):
         self.asset_table.delete(*self.asset_table.get_children())
@@ -134,8 +136,7 @@ class FactionEditUI:
     def asset_clicked(self, event):
         """Passes index of currently chosen asset to FactionEditController with FactionEditController.asset_chosen(index)
          method"""
-        assets = self.asset_table.get_children()
-        self.controller.asset_chosen(assets.index(self.asset_table.focus()))
+        self.controller.asset_chosen(self.asset_table.focus())
 
     def asset_save(self):
         self.controller.modify_asset(self.asset_hp_entry.get(), self.cur_asset_location.get())

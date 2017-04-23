@@ -33,4 +33,3 @@ class AssetDatabase:
                     temp_assets.append(asset)
                     print(asset.name)
             return temp_assets
-            # [asset for (key, asset) in self.asset_dict if type in asset.type and tl <= asset.tl and asset_class in asset.asset_class and max_level >= int(asset.level[1:])]

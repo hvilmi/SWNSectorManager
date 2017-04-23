@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import sectorUI.treeviewsort as tvsort
 
 
 class FactionTreeViewUI:
@@ -7,17 +8,17 @@ class FactionTreeViewUI:
         self.parent = parent
         self.controller = faction_controller
 
+        fac_columns = ['Name', 'HP', 'Force', 'Cunning', 'Wealth', 'FacCreds', 'Homeworld', 'XP']
         self.faction_frame = tk.Frame(self.parent)
         self.faction_frame.grid(column=x_coord, row=y_coord)
-        self.faction_treeview = ttk.Treeview(self.faction_frame,
-                                             columns=['Name', 'HP', 'Force', 'Cunning', 'Wealth', 'FacCreds',
-                                                      'Homeworld', 'XP'])
+        self.faction_treeview = ttk.Treeview(self.faction_frame, columns=fac_columns)
 
-        for id in ['Name', 'HP', 'Force', 'Cunning', 'Wealth', 'FacCreds', 'Homeworld', 'XP']:
+        for id in fac_columns:
             self.faction_treeview.column(id, width=75, anchor='center')
             self.faction_treeview.heading(id, text=id)
         self.faction_treeview.grid(row=0, column=0)
 
+        tvsort.make_treeview_sortable(self.faction_treeview, fac_columns)
         self.faction_treeview['show'] = 'headings'
         self.faction_treeview.bind('<Double-1>', self.on_double_click)
 

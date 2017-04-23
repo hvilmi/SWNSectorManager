@@ -19,11 +19,11 @@ class Faction:
         return levels[string]
 
     def add_new_asset(self, star, planet, base_asset: Asset.Asset):
-        new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet)
+        new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet, self.get_asset_id())
         self.assets.append(new_asset)
 
     def add_asset(self, star, planet, cur_hp, base_asset):
-        new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet)
+        new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet, self.get_asset_id())
         self.assets.append(new_asset)
 
     def get_occupied_planets(self):
@@ -32,3 +32,11 @@ class Faction:
             locations.append(asset_instance.get_location())
         # Convert list of asset locations to a set and back to list to remove duplicates
         return list(set(locations))
+
+    def get_asset_id(self):
+        return len(self.assets)
+
+    def get_asset_by_id(self, id):
+        for asset in self.assets:
+            if asset.index == id:
+                return asset

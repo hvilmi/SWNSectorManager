@@ -77,12 +77,16 @@ class FactionEditController:
         self.faction_ui.empty_table()
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
-            self.faction_ui.show_asset(base_asset.name, base_asset.asset_class, asset_instance.cur_hp,
-                                       base_asset.cost, base_asset.tl, base_asset.type, base_asset.attack,
-                                       base_asset.counterattack, base_asset.special, asset_instance.get_location())
+            asset_instance.index = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
+                                                              asset_instance.cur_hp,
+                                                              base_asset.cost, base_asset.tl, base_asset.type,
+                                                              base_asset.attack,
+                                                              base_asset.counterattack, base_asset.special,
+                                                              asset_instance.get_location())
 
     def asset_chosen(self, index):
-        chosen_asset = self.cur_faction.assets[index]
+        print(self.cur_faction.assets)
+        chosen_asset = self.cur_faction.get_asset_by_id(index)
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp)
         self.cur_asset = chosen_asset
 
