@@ -12,3 +12,9 @@ class Asset:
 
     def get_name(self):
         return self.name
+
+    def get_type(self, show_level=False):
+        if show_level:
+            return self.type
+        else:
+            return self.type[0]

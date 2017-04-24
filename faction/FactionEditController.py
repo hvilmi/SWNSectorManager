@@ -10,6 +10,7 @@ SEPARATOR = '-------'
 
 class FactionEditController:
     def __init__(self, faction_controller, faction: Faction):
+        self.cur_asset = None
         self.faction_controller = faction_controller
         self.cur_faction = faction
         self.asset_db = AssetDatabase.AssetDatabase()
@@ -17,8 +18,6 @@ class FactionEditController:
                                                       faction.wealth, faction.fac_creds, faction.homeworld)
         self.asset_window = None
 
-
-        self.cur_asset = None
         self.asset_treeview_index = {}
         self.show_assets()
 
@@ -49,6 +48,13 @@ class FactionEditController:
             self.asset_window = AssetBuyingUI.AssetBuyingUI(self)
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
 
+    def update_faction_ui(self):
+        self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp,
+                                   self.cur_faction.fac_creds,
+                                   self.cur_faction.force, self.cur_faction.cunning,
+                                   self.cur_faction.wealth,
+                                   self.cur_faction.homeworld)
+
     def acquire_asset(self, asset_name, location, ignore_cost):
         try:
             star, planet = location.split(' - ')
@@ -58,9 +64,7 @@ class FactionEditController:
                     if self.faction_controller.sector.get_planet_by_name(planet).get_tl() >= base_asset.tl:
                         self.cur_faction.add_new_asset(star, planet, base_asset)
                         self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
-                        self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds,
-                                                   self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,
-                                                   self.cur_faction.homeworld)
+                        self.update_faction_ui()
                     else:
                         self.asset_window.raise_error(AssetBuyingUI.TL_ERROR)
                 else:
@@ -82,13 +86,16 @@ class FactionEditController:
         self.faction_ui.empty_table()
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
+            refit_names = [asset.get_name() for asset in self.asset_db.query(type=base_asset.get_type())]
             treeview_id = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
                                                      asset_instance.cur_hp,
                                                      base_asset.cost, base_asset.tl, base_asset.type,
                                                      base_asset.attack,
                                                      base_asset.counterattack, base_asset.special,
-                                                     asset_instance.get_location())
+                                                     asset_instance.get_location(),
+                                                     refit_names)
             self.asset_treeview_index[treeview_id] = asset_instance.index
+        self.asset_chosen(list(self.asset_treeview_index.keys())[0])
 
     def asset_chosen(self, index):
         print(self.cur_faction.assets)
@@ -96,7 +103,28 @@ class FactionEditController:
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp)
         self.cur_asset = chosen_asset
 
-    def modify_asset(self, hp, location):
+    def modify_asset(self, hp, location, refit_asset, refit_cost):
+
         self.cur_asset.cur_hp = hp
         self.cur_asset.set_location(location)
         self.show_assets()
+        if self.asset_db.query(name=refit_asset)[0] != self.cur_asset.base_asset:
+            # Refit is done
+            if refit_cost <= self.cur_faction.fac_creds:
+                self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - int(refit_cost)
+                self.cur_asset.base_asset = self.asset_db.query(name=refit_asset)[0]
+        self.update_faction_ui()
+        self.show_assets()
+
+    def refit_choice_changed(self, name):
+        if self.cur_asset is None:
+            pass
+        else:
+            refit_asset = self.asset_db.query(name=name)[0]
+            refit_cost = int(refit_asset.cost) - int(self.cur_asset.base_asset.cost)
+            if refit_cost > 0:
+                print("Refit cost:")
+                print(refit_cost)
+                self.faction_ui.show_refit_cost(refit_cost)
+            else:
+                self.faction_ui.show_refit_cost(0)

@@ -77,9 +77,16 @@ class FactionEditUI:
         self.asset_hp_entry = tk.Entry(self.asset_edit_frame)
         self.asset_hp_entry.grid(column=1, row=1)
 
-        # TODO: Implement changing asset to another of same type. Perhaps with simple tk.OptionMenu
+        self.asset_refit_var = tk.StringVar()
+        self.asset_refit_var.trace("w", self.refit_change)
+        self.asset_refit_menu = ttk.OptionMenu(self.asset_edit_frame, self.asset_refit_var)
+        self.asset_refit_menu.grid(column=0, row=2)
 
-        tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=2)
+        self.refit_price = tk.StringVar()
+        self.refit_price.set('0')
+        tk.Label(self.asset_edit_frame, textvariable=self.refit_price).grid(column=1, row=2)
+
+        tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
 
     def set_asset_info(self, name, location, hp):
         """Fills asset_edit_frame with information of chosen asset"""
@@ -124,10 +131,17 @@ class FactionEditUI:
     def open_asset_window(self):
         self.controller.create_asset_window()
 
-    def show_asset(self, name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special, location):
+    def show_asset(self, name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special, location,
+                   refit_options):
         self.asset_table.insert('', 'end',
                                 values=[name, asset_class, hp, cost, tl, asset_type, attack, counterattack, special,
                                         location])
+        self.asset_refit_menu['menu'].delete(0, tk.END)
+        for asset in refit_options:
+            self.asset_refit_menu['menu'].add_command(label=asset,
+                                                      command=lambda _asset=asset: self.asset_refit_menu.setvar(
+                                                          self.asset_refit_menu.cget("textvariable"), value=_asset))
+        self.asset_refit_var.set(name)
         return self.asset_table.get_children()[-1]
 
     def empty_table(self):
@@ -139,4 +153,14 @@ class FactionEditUI:
         self.controller.asset_chosen(self.asset_table.focus())
 
     def asset_save(self):
-        self.controller.modify_asset(self.asset_hp_entry.get(), self.cur_asset_location.get())
+        self.save_faction()
+        self.controller.modify_asset(self.asset_hp_entry.get(), self.cur_asset_location.get(),
+                                     self.asset_refit_var.get(), self.refit_price.get())
+        self.save_faction()
+
+    def refit_change(self, *args):
+        print(self.asset_refit_var.get())
+        self.controller.refit_choice_changed(self.asset_refit_var.get())
+
+    def show_refit_cost(self, cost):
+        self.refit_price.set(cost)
