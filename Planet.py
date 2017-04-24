@@ -1,7 +1,7 @@
 class Planet:
     """description of class"""
 
-    def __init__(self, name, pop, desc, tags, tl, **kwargv):
+    def __init__(self, name, pop, desc, tags, tl):
         self.name = name
         self.pop = pop
         self.desc = desc
@@ -21,7 +21,11 @@ class Planet:
         return self.desc
 
     def get_tl(self):
-        return self.tl
+        if self.tl:
+            return int(self.tl)
+        else:
+            # No tech level set. Default to 0.
+            return 0
     
 
 

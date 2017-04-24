@@ -16,9 +16,11 @@ class FactionEditController:
         self.faction_ui = FactionEditUI.FactionEditUI(self, faction.name, faction.hp, faction.force, faction.cunning,
                                                       faction.wealth, faction.fac_creds, faction.homeworld)
         self.asset_window = None
-        self.show_assets()
+
 
         self.cur_asset = None
+        self.asset_treeview_index = {}
+        self.show_assets()
 
     def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, homeworld):
         self.cur_faction.name = new_name
@@ -48,23 +50,26 @@ class FactionEditController:
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
 
     def acquire_asset(self, asset_name, location, ignore_cost):
-        star, planet = location.split(' - ')
-        base_asset = self.asset_db.query(name=asset_name)[0]
-        if not ignore_cost:
-            if base_asset.cost <= int(self.cur_faction.fac_creds):
-                self.cur_faction.add_new_asset(star, planet, base_asset)
-                self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
-                self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds,
-                                           self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,
-                                           self.cur_faction.homeworld)
-                print('Asset with cost')
+        try:
+            star, planet = location.split(' - ')
+            base_asset = self.asset_db.query(name=asset_name)[0]
+            if not ignore_cost:
+                if base_asset.cost <= int(self.cur_faction.fac_creds):
+                    if self.faction_controller.sector.get_planet_by_name(planet).get_tl() >= base_asset.tl:
+                        self.cur_faction.add_new_asset(star, planet, base_asset)
+                        self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
+                        self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp, self.cur_faction.fac_creds,
+                                                   self.cur_faction.force, self.cur_faction.cunning, self.cur_faction.wealth,
+                                                   self.cur_faction.homeworld)
+                    else:
+                        self.asset_window.raise_error(AssetBuyingUI.TL_ERROR)
+                else:
+                    self.asset_window.raise_error(AssetBuyingUI.COST_ERROR)
             else:
-                # TODO:Raise graphical error for user
-                print("Not enough facCreds")
-        else:
-            print('Asset without cost')
-            self.cur_faction.add_new_asset(star, planet, base_asset)
-        self.show_assets()
+                self.cur_faction.add_new_asset(star, planet, base_asset)
+            self.show_assets()
+        except ValueError:
+            self.asset_window.raise_error(AssetBuyingUI.PLANET_ERROR)
 
     def get_asset_world_list(self):
         """Returns list of planets on sector where current faction can acquire assets followed by rest of the worlds"""
@@ -77,16 +82,17 @@ class FactionEditController:
         self.faction_ui.empty_table()
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
-            asset_instance.index = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
-                                                              asset_instance.cur_hp,
-                                                              base_asset.cost, base_asset.tl, base_asset.type,
-                                                              base_asset.attack,
-                                                              base_asset.counterattack, base_asset.special,
-                                                              asset_instance.get_location())
+            treeview_id = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
+                                                     asset_instance.cur_hp,
+                                                     base_asset.cost, base_asset.tl, base_asset.type,
+                                                     base_asset.attack,
+                                                     base_asset.counterattack, base_asset.special,
+                                                     asset_instance.get_location())
+            self.asset_treeview_index[treeview_id] = asset_instance.index
 
     def asset_chosen(self, index):
         print(self.cur_faction.assets)
-        chosen_asset = self.cur_faction.get_asset_by_id(index)
+        chosen_asset = self.cur_faction.get_asset_by_id(self.asset_treeview_index[index])
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp)
         self.cur_asset = chosen_asset
 

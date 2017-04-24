@@ -2,6 +2,12 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import sectorUI.treeviewsort as tvsort
 
+NO_ERROR = "Asset Acquired."
+COST_ERROR = "Not enough facCreds."
+TL_ERROR = "Planet is not advanced enough."
+PLANET_ERROR = "No planet chosen."
+PERMISSION_ERROR = "No permission from planetary authority."  # Not currently used.
+
 
 class AssetBuyingUI:
     def __init__(self, parent):
@@ -30,8 +36,11 @@ class AssetBuyingUI:
         tk.Button(main_frame, text='Acquire Asset', command=self.acquire_button_pressed).grid(row=12, column=0)
 
         self.world_selection = tk.StringVar()
-        tk.OptionMenu(main_frame, self.world_selection, *self.parent.get_asset_world_list()).grid(row=12, column=1)
+        tk.OptionMenu(main_frame, self.world_selection, *self.parent.get_asset_world_list()).grid(row=10, column=1)
         self.world_selection.set(self.parent.get_asset_world_list()[0])
+
+        self.error_text = tk.StringVar()
+        tk.Label(main_frame, textvariable=self.error_text).grid(row=12, column=1, columnspan=2)
 
     @staticmethod
     def create_asset_table(parent_nb, asset_type):
@@ -73,3 +82,6 @@ class AssetBuyingUI:
         chosen_asset_name = active_table.item(active_table.focus())['values'][0]
         print("Chosen Asset name: " + chosen_asset_name)
         self.parent.acquire_asset(chosen_asset_name, self.world_selection.get(), self.cost_bool.get())
+
+    def raise_error(self, error):
+        self.error_text.set(error)

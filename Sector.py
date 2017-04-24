@@ -40,6 +40,7 @@ class Sector:
         return sorted(planet_list, key=str.lower)
 
     def get_planet_by_name(self, name):
-        '''Returns first planet found with a given name'''
+        """Returns first planet found with a given name"""
         for star in self.stars:
-            return star.get_planet_by_name(name)
+            if star.get_planet_by_name(name):
+                return star.get_planet_by_name(name)
