@@ -86,21 +86,20 @@ class FactionEditController:
         self.faction_ui.empty_table()
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
-            refit_names = [asset.get_name() for asset in self.asset_db.query(type=base_asset.get_type())]
             treeview_id = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
                                                      asset_instance.cur_hp,
                                                      base_asset.cost, base_asset.tl, base_asset.type,
                                                      base_asset.attack,
                                                      base_asset.counterattack, base_asset.special,
-                                                     asset_instance.get_location(),
-                                                     refit_names)
+                                                     asset_instance.get_location())
             self.asset_treeview_index[treeview_id] = asset_instance.index
         self.asset_chosen(list(self.asset_treeview_index.keys())[0])
 
     def asset_chosen(self, index):
-        print(self.cur_faction.assets)
         chosen_asset = self.cur_faction.get_asset_by_id(self.asset_treeview_index[index])
-        self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp)
+        refit_names = [asset.get_name() for asset in self.asset_db.query(type=chosen_asset.base_asset.get_type())]
+        self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp,
+                                       refit_names)
         self.cur_asset = chosen_asset
 
     def modify_asset(self, hp, location, refit_asset, refit_cost):
