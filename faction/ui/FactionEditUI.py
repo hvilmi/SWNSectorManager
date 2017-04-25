@@ -87,6 +87,7 @@ class FactionEditUI:
         tk.Label(self.asset_edit_frame, textvariable=self.refit_price).grid(column=1, row=2)
 
         tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
+        tk.Button(self.asset_edit_frame, text='Delete Asset', command=self.asset_delete).grid(column=1, row=3)
 
     def set_asset_info(self, name, location, hp, refit_options):
         """Fills asset_edit_frame with information of chosen asset"""
@@ -165,5 +166,7 @@ class FactionEditUI:
         self.controller.refit_choice_changed(self.asset_refit_var.get())
 
     def show_refit_cost(self, cost):
-        print('Updated refit cost' + str(cost))
         self.refit_price.set(cost)
+
+    def asset_delete(self):
+        self.controller.delete_cur_asset()

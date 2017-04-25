@@ -84,6 +84,7 @@ class FactionEditController:
 
     def show_assets(self):
         self.faction_ui.empty_table()
+        self.asset_treeview_index = {}
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
             treeview_id = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
@@ -127,3 +128,7 @@ class FactionEditController:
                 self.faction_ui.show_refit_cost(refit_cost)
             else:
                 self.faction_ui.show_refit_cost(0)
+
+    def delete_cur_asset(self):
+        self.cur_faction.assets.remove(self.cur_asset)
+        self.show_assets()
