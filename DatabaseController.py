@@ -5,6 +5,8 @@ import json
 import faction.Faction as Faction
 from faction.assets import AssetDatabase
 
+CURRENT_VERSION = 2
+
 
 class DatabaseController:
     def __init__(self, path):
@@ -25,20 +27,24 @@ class DatabaseController:
         try:
             sector_dict = json.load(f)
             self.sector.set_name(sector_dict['name'])
-            for star in sector_dict['stars']:
-                new_star = StarSystem.StarSystem(name=star['name'], coord=star['coord'])
-                for planet in star['planets']:
-                    print(star['planets'])
-                    new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'],
-                                            '', '', '')
-                self.sector.add_star(new_star)
-            for faction in sector_dict['factions']:
-                self.factions.append(
-                    Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
-                                    faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
-                for asset in faction['assets']:
-                    self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
-                                                asset_db.query(name=asset['name'])[0])
+            if sector_dict['version'] < CURRENT_VERSION:
+                self.old_load(sector_dict, asset_db)
+            else:
+                for star in sector_dict['stars']:
+                    new_star = StarSystem.StarSystem(name=star['name'], coord=star['coord'])
+                    for planet in star['planets']:
+                        print(star['planets'])
+                        new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'],
+                                                planet['tl'], planet['atmosphere'], planet['biosphere'],
+                                                planet['temperature'])
+                    self.sector.add_star(new_star)
+                for faction in sector_dict['factions']:
+                    self.factions.append(
+                        Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
+                                        faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
+                    for asset in faction['assets']:
+                        self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
+                                                    asset_db.query(name=asset['name'])[0])
 
         except json.JSONDecodeError as e:
             print("Sector Decoding error: " + str(e))
@@ -71,13 +77,14 @@ class DatabaseController:
         f.close()
         # ---------#
         print('saving to ' + self.path)
-        sector_dict = {'name': self.sector.get_name(), 'stars': [], 'factions': []}
+        sector_dict = {'version': CURRENT_VERSION, 'name': self.sector.get_name(), 'stars': [], 'factions': []}
         with open(self.path, 'w') as f:
             for star in self.sector.get_stars():
                 star_dict = {'name': star.get_name(), 'coord': star.get_coord(), 'planets': []}
                 for planet in star.get_planets():
                     planet_dict = {'name': planet.get_name(), 'pop': planet.get_pop(), 'tags': planet.get_tags(),
-                                   'tl': planet.get_tl(), 'desc': planet.get_desc()}
+                                   'tl': planet.tl, 'desc': planet.get_desc(), 'atmosphere':planet.atmosphere,
+                                   'biosphere': planet.biosphere, 'temperature': planet.temperature}
                     star_dict['planets'].append(planet_dict)
                 sector_dict['stars'].append(star_dict)
             for faction in self.factions:
@@ -93,3 +100,21 @@ class DatabaseController:
                 sector_dict['factions'].append(faction_dict)
             json.dump(sector_dict, f, sort_keys=True, indent=4)
             return 0
+
+    def old_load(self, sector_dict, asset_db):
+        if sector_dict['version'] == 1:
+            # Before adding atmosphere, biosphere and temperature fields to planets.
+            for star in sector_dict['stars']:
+                new_star = StarSystem.StarSystem(name=star['name'], coord=star['coord'])
+                for planet in star['planets']:
+                    print(star['planets'])
+                    new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'],
+                                            '', '', '')
+                self.sector.add_star(new_star)
+            for faction in sector_dict['factions']:
+                self.factions.append(
+                    Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
+                                    faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
+                for asset in faction['assets']:
+                    self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
+                                                asset_db.query(name=asset['name'])[0])
