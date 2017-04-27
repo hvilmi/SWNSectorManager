@@ -136,7 +136,7 @@ class MainUI:
         if self.mapCanvas.find_withtag(CURRENT):
             self.parent.star_system_selected(self.get_coord_by_id(self.mapCanvas.find_withtag(CURRENT)[0] - 1))
 
-    def show_planet_info(self, name, pop, desc, tags=None, tl=4):
+    def show_planet_info(self, name, pop, desc, tags, tl, atmosphere, biosphere, temperature):
 
         if tags is None:
             tags = ['']
@@ -150,7 +150,13 @@ class MainUI:
 
         Label(planet_info_frame, text='Population: ' + str(pop)).grid(column=2, row=0, columnspan=2)
 
-        Label(planet_info_frame, text='Tech Level: ' + str(tl)).grid(column=4, row=0, columnspan=2)
+        Label(planet_info_frame, text='Tech Level: ' + str(tl)).grid(column=0, row=1, columnspan=2)
+
+        Label(planet_info_frame, text='Atmosphere: ' + str(atmosphere)).grid(column=2, row=1, columnspan=2)
+
+        Label(planet_info_frame, text='Biosphere: ' + str(biosphere)).grid(column=0, row=2, columnspan=2)
+
+        Label(planet_info_frame, text='Temperature: ' + str(temperature)).grid(column=2, row=2, columnspan=2)
 
         tag_text = ''
         for i in range(len(tags)):
@@ -160,16 +166,16 @@ class MainUI:
                 tag_text = tag_text + ', '
             tag_text = tag_text + str(tags[i])
 
-        Label(planet_info_frame, text='Tags').grid(row=1, column=0)
+        Label(planet_info_frame, text='Tags').grid(row=3, column=0)
 
         planet_tag_label = Label(planet_info_frame, text=tag_text)
-        planet_tag_label.grid(column=1, row=1, columnspan=5)
+        planet_tag_label.grid(column=1, row=3, columnspan=5)
 
         # separator = ttk.Separator(planet_frame, orient=VERTICAL)
         # separator.grid(column=1, row=0, rowspan=4)
 
         planet_desc_frame = LabelFrame(planet_frame, text='Description', width=300)
-        planet_desc_frame.grid(column=0, row=2, columnspan=4, sticky=NSEW)
+        planet_desc_frame.grid(column=0, row=4, columnspan=4, sticky=NSEW)
 
         # planet_desc_label = Label(planet_desc_frame, text='Description:')
         # planet_desc_label.grid(column=2, row=0)

@@ -4,8 +4,10 @@ import math
 
 
 class StarEditorUI:
-    def __init__(self, parent):
+    def __init__(self, parent, config):
         self.parent = parent
+        self.manual_entry = False
+        self.config = config
 
         self.name_window = None
         self.new_name_field = None
@@ -67,7 +69,16 @@ class StarEditorUI:
         add_new_tab = Frame(self.editor_nb)
         self.editor_nb.add(add_new_tab, text='<New Planet>')
 
-    def show_planet(self, name='', pop='', desc='', tags=None, tl=''):
+    def place_planet_info_widget(self, parent, m_row, m_column, text, options):
+        attr_var = StringVar()
+        attr_var.set(text)
+        if self.manual_entry:
+            Entry(parent, textvariable=attr_var).grid(row=m_row, column=m_column)
+        else:
+            OptionMenu(parent, attr_var, *options).grid(row=m_row, column=m_column)
+        return attr_var
+
+    def show_planet(self, name='', pop='', desc='', tags=None, tl='', atmosphere='', biosphere='', temperature=''):
         if tags is None:
             tags = ['']
         self.planet_info_list.append({})
@@ -78,28 +89,35 @@ class StarEditorUI:
         planet_info_frame = LabelFrame(planet_frame, text='Planet Info', width=200)
         planet_info_frame.grid(row=0, column=0, sticky=(N, W, S))
 
-        planet_name_label = Label(planet_info_frame, text='Name: ')
-        planet_name_label.grid(column=0, row=0)
-
+        Label(planet_info_frame, text='Name: ').grid(column=0, row=0)
         planet_name_entry = Entry(planet_info_frame)
         planet_name_entry.insert(END, str(name))
         planet_name_entry.grid(column=1, row=0)
         self.planet_info_list[len(self.planet_info_list) - 1]['name'] = planet_name_entry
 
-        planet_pop_label = Label(planet_info_frame, text='Population: ')
-        planet_pop_label.grid(column=0, row=1)
+        Label(planet_info_frame, text='Atmosphere: ').grid(column=2, row=0)
+        planet_atmosphere_entry = self.place_planet_info_widget(planet_info_frame, 0, 3, atmosphere,
+                                                                self.config['atmosphere'])
+        self.planet_info_list[len(self.planet_info_list)-1]['atmosphere'] = planet_atmosphere_entry
 
+        Label(planet_info_frame, text='Biosphere: ').grid(column=2, row=1)
+        planet_biosphere_entry = self.place_planet_info_widget(planet_info_frame, 1, 3, biosphere,
+                                                               self.config['biosphere'])
+        self.planet_info_list[-1]['biosphere'] = planet_biosphere_entry
+
+        Label(planet_info_frame, text='Temperature: ').grid(column=2, row=2)
+        planet_temperature_entry = self.place_planet_info_widget(planet_info_frame, 2, 3, temperature,
+                                                                 self.config['temperature'])
+        self.planet_info_list[-1]['temperature'] = planet_temperature_entry
+
+        Label(planet_info_frame, text='Population: ').grid(column=0, row=1)
         planet_pop_entry = Entry(planet_info_frame)
         planet_pop_entry.insert(END, str(pop))
         planet_pop_entry.grid(column=1, row=1)
         self.planet_info_list[len(self.planet_info_list) - 1]['pop'] = planet_pop_entry
 
-        planet_tl_label = Label(planet_info_frame, text='Tech Level: ')
-        planet_tl_label.grid(column=0, row=2)
-
-        planet_tl_entry = Entry(planet_info_frame)
-        planet_tl_entry.insert(END, str(tl))
-        planet_tl_entry.grid(column=1, row=2)
+        Label(planet_info_frame, text='Tech Level: ').grid(column=0, row=2)
+        planet_tl_entry = self.place_planet_info_widget(planet_info_frame, 2, 1, str(tl), self.config['tech level'])
         self.planet_info_list[len(self.planet_info_list) - 1]['tl'] = planet_tl_entry
 
         Label(planet_info_frame, text='Tags:').grid(column=0, row=3)
@@ -113,9 +131,6 @@ class StarEditorUI:
             except IndexError:
                 pass
         self.planet_info_list[len(self.planet_info_list) - 1]['tags'] = tag_entry_list
-
-        # separator = ttk.Separator(planet_frame, orient=VERTICAL)
-        # separator.grid(column=1, row=0, rowspan=4)
 
         planet_desc_label = Label(planet_info_frame, text='Description: ')
         planet_desc_label.grid(column=0, row=6, sticky=NSEW)
@@ -139,7 +154,7 @@ class StarEditorUI:
         planet_list = []
         for planet in self.planet_info_list:
             planet_list.append({})
-            for field in ['name', 'pop', 'tl']:
+            for field in ['name', 'pop', 'tl', 'atmosphere', 'biosphere', 'temperature']:
                 planet_list[-1][field] = planet[field].get()
             planet_list[-1]['desc'] = planet['desc'].get(1.0, END)
             # Tags need to be handled separately

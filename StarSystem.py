@@ -23,8 +23,8 @@ class StarSystem:
         self.planets.append(planet)
         print('added existing planet')
 
-    def add_new_planet(self, name, pop, desc, tags, tl):
-        new_planet = Planet.Planet(name, pop, desc, tags, tl)
+    def add_new_planet(self, name, pop, desc, tags, tl, atmosphere, biosphere, temperature):
+        new_planet = Planet.Planet(name, pop, desc, tags, tl, atmosphere, biosphere, temperature)
         self.planets.append(new_planet)
 
     def get_planets(self):

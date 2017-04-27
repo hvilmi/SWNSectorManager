@@ -29,7 +29,8 @@ class DatabaseController:
                 new_star = StarSystem.StarSystem(name=star['name'], coord=star['coord'])
                 for planet in star['planets']:
                     print(star['planets'])
-                    new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'])
+                    new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'],
+                                            '', '', '')
                 self.sector.add_star(new_star)
             for faction in sector_dict['factions']:
                 self.factions.append(

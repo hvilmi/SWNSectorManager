@@ -1,7 +1,10 @@
 class Planet:
     """description of class"""
 
-    def __init__(self, name, pop, desc, tags, tl):
+    def __init__(self, name, pop, desc, tags, tl, atmosphere='', bio='', temperature=''):
+        self.temperature = temperature
+        self.biosphere = bio
+        self.atmosphere = atmosphere
         self.name = name
         self.pop = pop
         self.desc = desc
@@ -21,8 +24,9 @@ class Planet:
         return self.desc
 
     def get_tl(self):
+        """Returns tech level of the planet as a number."""
         if self.tl:
-            return int(self.tl)
+            return int(self.tl[0])
         else:
             # No tech level set. Default to 0.
             return 0

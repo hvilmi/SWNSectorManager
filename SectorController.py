@@ -3,6 +3,7 @@ import sectorUI.StarEditorUI as StarEditorUI
 import StarSystem
 import faction.FactionController as FactionController
 import sectorUI.SectorManagerUI as SectorManagerUI
+import ConfigReader
 
 
 class SectorController:
@@ -23,9 +24,9 @@ class SectorController:
             self.mainUI.purge_planet_info()
             for planet in star.get_planets():
                 print('planet info:', planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
-                      planet.get_tl())
+                      planet.tl)
                 self.mainUI.show_planet_info(planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
-                                             planet.get_tl())
+                                             planet.tl, planet.atmosphere, planet.biosphere, planet.temperature)
 
     def show_stars_on_ui(self):
         self.mainUI.make_sector_grid()
@@ -40,13 +41,13 @@ class SectorController:
 
     def edit_star(self, coord):
         star = self.sector.get_star_by_coord(coord)
-        self.editor_ui = StarEditorUI.StarEditorUI(self)
+        self.editor_ui = StarEditorUI.StarEditorUI(self, ConfigReader.read_config())
         if star:
             # Create window for editing here if a star already exists
             self.editor_ui.create_editor_window(star.get_name(), coord)
             for planet in star.get_planets():
                 self.editor_ui.show_planet(planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
-                                           planet.get_tl())
+                                           planet.tl, planet.atmosphere, planet.biosphere, planet.temperature)
             self.editor_ui.set_ready()
         else:
             # Ask for name of the new star before starting the editing
@@ -61,7 +62,8 @@ class SectorController:
         else:
             print('error')
         for planet in planets_info:
-            new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'])
+            new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'], planet['tl'],
+                                    planet['atmosphere'], planet['biosphere'], planet['temperature'])
         self.show_stars_on_ui()
 
     def save_sector_to_file(self):
