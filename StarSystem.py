@@ -4,7 +4,7 @@ import Planet
 class StarSystem:
     """Container for Planets"""
 
-    def __init__(self, name='', coord=(-1,-1), planets=None):
+    def __init__(self, name='', coord=(-1, -1), planets=None):
         if planets:
             self.planets = planets
         else:
@@ -17,7 +17,6 @@ class StarSystem:
 
     def set_coord(self, coord):
         self.coord = coord
-
 
     def add_planet(self, planet):
         self.planets.append(planet)
@@ -36,9 +35,7 @@ class StarSystem:
     def get_coord(self):
         return self.coord
 
-
     def get_planet_by_name(self, name):
         for planet in self.planets:
             if planet.get_name() == name:
                 return planet
-

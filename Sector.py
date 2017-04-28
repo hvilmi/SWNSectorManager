@@ -1,8 +1,8 @@
 import Planet
 import StarSystem
 
-class Sector:
 
+class Sector:
     def __init__(self, name=''):
         self.stars = []
         self.name = name
@@ -34,7 +34,7 @@ class Sector:
         planet_list = []
         for star in self.stars:
             for planet in star.get_planets():
-                planet_list.append(star.get_name() +" - "+ planet.get_name())
+                planet_list.append(star.get_name() + " - " + planet.get_name())
         if len(planet_list) == 0:
             planet_list = [""]
         return sorted(planet_list, key=str.lower)
@@ -44,3 +44,6 @@ class Sector:
         for star in self.stars:
             if star.get_planet_by_name(name):
                 return star.get_planet_by_name(name)
+
+    def delete_star(self, star):
+        self.stars.remove(star)

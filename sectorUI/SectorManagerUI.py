@@ -10,7 +10,7 @@ GRID_COLUMNS = 8
 
 
 class MainUI:
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent):
         self.parent = parent
         self.prev_hovered = []  # List containing ids of previously hovered hex
         self.prev_current = -1
@@ -47,6 +47,7 @@ class MainUI:
         # popup menu for adding new stars or editing existing stars
         self.planet_menu = Menu(self.root, tearoff=0)
         self.planet_menu.add_command(label='Edit Star', command=self.star_chosen)
+        self.planet_menu.add_command(label='Delete Star', command=self.delete_star)
 
         # ///////////////////////////////////////////////
         # Area for showing information on factions
@@ -121,16 +122,16 @@ class MainUI:
 
     def get_coord_by_id(self, id):
         '''Returns integer coordinates (x,y) of a given hex id.'''
-        return (math.floor(float(id) / float(GRID_ROWS)), (id) % GRID_ROWS)
+        return math.floor(float(id) / float(GRID_ROWS)), (id) % GRID_ROWS
 
     def get_real_coord_by_id(self, id):
         int_coord = self.get_coord_by_id(id)
         width = HEX_SIZE * 2
         height = HEX_SIZE * math.sqrt(3)
         if int_coord[0] % 2 == 0:
-            return ((int_coord[0] + 1) * width * 3 / 4, (int_coord[1] + 1) * height)
+            return (int_coord[0] + 1) * width * 3 / 4, (int_coord[1] + 1) * height
         else:
-            return ((int_coord[0] + 1) * width * 3 / 4, (int_coord[1] + 3 / 2) * height)
+            return (int_coord[0] + 1) * width * 3 / 4, (int_coord[1] + 3 / 2) * height
 
     def on_hexagon_click(self, event):
         if self.mapCanvas.find_withtag(CURRENT):
@@ -230,3 +231,6 @@ class MainUI:
 
     def save_sector_as(self):
         self.parent.save_sector_new_file()
+
+    def delete_star(self):
+        self.parent.delete_star(self.get_coord_by_id(self.prev_current[0]-1))

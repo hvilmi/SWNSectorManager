@@ -51,20 +51,21 @@ class StarEditorUI:
         self.editor_ready = False
 
         self.current_coord = coord
+        if not self.edit_planets_window:
+            self.edit_planets_window = Toplevel()
+            self.edit_planets_window.title('Editing ' + star_name + ' system')
 
-        self.edit_planets_window = Toplevel()
-        self.edit_planets_window.title('Editing ' + star_name + ' system')
-
+        if self.editor_nb:
+            self.editor_nb.destroy()
+            self.planet_info_list = []
         self.editor_nb = ttk.Notebook(self.edit_planets_window)
-        self.editor_nb.grid(row=0, column=0, sticky=(N, W, E, S))
+        self.editor_nb.grid(row=0, column=0, sticky=(N, W, E, S), columnspan=5)
 
         self.editor_nb.bind('<<NotebookTabChanged>>', self.on_tab_change)
 
-        button_save = Button(self.edit_planets_window, text='Save', command=self.send_changes)
-        button_save.grid(row=1, column=0)
-
-        button_discard = Button(self.edit_planets_window, text='Cancel', command=self.discard_changes)
-        button_discard.grid(row=1, column=1)
+        Button(self.edit_planets_window, text='Save', command=self.send_changes).grid(row=1, column=0)
+        Button(self.edit_planets_window, text='Cancel', command=self.discard_changes).grid(row=1, column=1)
+        Button(self.edit_planets_window, text='Delete', command=self.delete_planet).grid(row=1, column=2)
 
         add_new_tab = Frame(self.editor_nb)
         self.editor_nb.add(add_new_tab, text='<New Planet>')
@@ -98,7 +99,7 @@ class StarEditorUI:
         Label(planet_info_frame, text='Atmosphere: ').grid(column=2, row=0)
         planet_atmosphere_entry = self.place_planet_info_widget(planet_info_frame, 0, 3, atmosphere,
                                                                 self.config['atmosphere'])
-        self.planet_info_list[len(self.planet_info_list)-1]['atmosphere'] = planet_atmosphere_entry
+        self.planet_info_list[len(self.planet_info_list) - 1]['atmosphere'] = planet_atmosphere_entry
 
         Label(planet_info_frame, text='Biosphere: ').grid(column=2, row=1)
         planet_biosphere_entry = self.place_planet_info_widget(planet_info_frame, 1, 3, biosphere,
@@ -173,3 +174,7 @@ class StarEditorUI:
 
         self.editor_nb.select(self.editor_nb.tabs()[0])
         self.editor_ready = True
+
+    def delete_planet(self):
+        planet_index = self.editor_nb.tabs().index(self.editor_nb.select())
+        self.parent.delete_planet(self.planet_info_list[planet_index]['name'].get())

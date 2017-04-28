@@ -46,25 +46,6 @@
     "stars": [
         {
             "coord": [
-                2,
-                0
-            ],
-            "name": "Star1",
-            "planets": [
-                {
-                    "atmosphere": "",
-                    "biosphere": "",
-                    "desc": "\n",
-                    "name": "Planet1",
-                    "pop": "",
-                    "tags": [],
-                    "temperature": "",
-                    "tl": 0
-                }
-            ]
-        },
-        {
-            "coord": [
                 3,
                 2
             ],

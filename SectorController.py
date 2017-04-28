@@ -16,6 +16,7 @@ class SectorController:
         self.editor_ui = None
         self.mainUI = SectorManagerUI.MainUI(self)
         self.mainUI.start_ui()
+        self.cur_star = None
 
     def star_system_selected(self, coord):
         print('star system selected')
@@ -40,12 +41,13 @@ class SectorController:
         self.faction_controller.display_factions()
 
     def edit_star(self, coord):
-        star = self.sector.get_star_by_coord(coord)
-        self.editor_ui = StarEditorUI.StarEditorUI(self, ConfigReader.read_config())
-        if star:
+        self.cur_star = self.sector.get_star_by_coord(coord)
+        if not type(self.editor_ui) is StarEditorUI.StarEditorUI:
+            self.editor_ui = StarEditorUI.StarEditorUI(self, ConfigReader.read_config())
+        if self.cur_star:
             # Create window for editing here if a star already exists
-            self.editor_ui.create_editor_window(star.get_name(), coord)
-            for planet in star.get_planets():
+            self.editor_ui.create_editor_window(self.cur_star.get_name(), coord)
+            for planet in self.cur_star.get_planets():
                 self.editor_ui.show_planet(planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
                                            planet.tl, planet.atmosphere, planet.biosphere, planet.temperature)
             self.editor_ui.set_ready()
@@ -88,3 +90,12 @@ class SectorController:
 
     def save_sector_new_file(self):
         result = self.db_control.save_sector(new_file=True)
+
+    def delete_star(self, coord):
+        self.sector.delete_star(self.sector.get_star_by_coord(coord))
+        # TODO: Implement raising a window asking if user is sure.
+        self.show_stars_on_ui()
+
+    def delete_planet(self, planet_name):
+        self.cur_star.planets.remove(self.cur_star.get_planet_by_name(planet_name))
+        self.edit_star(self.cur_star.coord)
