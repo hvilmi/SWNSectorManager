@@ -98,4 +98,3 @@ class SectorController:
 
     def delete_planet(self, planet_name):
         self.cur_star.planets.remove(self.cur_star.get_planet_by_name(planet_name))
-        self.edit_star(self.cur_star.coord)

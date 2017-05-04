@@ -178,3 +178,11 @@ class StarEditorUI:
     def delete_planet(self):
         planet_index = self.editor_nb.tabs().index(self.editor_nb.select())
         self.parent.delete_planet(self.planet_info_list[planet_index]['name'].get())
+        self.remove_current_tab()
+
+    def remove_current_tab(self):
+        index = self.editor_nb.tabs().index(self.editor_nb.select())
+        self.planet_info_list.pop(index)
+        self.editor_nb.select(self.editor_nb.tabs()[0])
+        self.editor_nb.forget(self.editor_nb.tabs()[index])
+
