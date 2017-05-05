@@ -90,9 +90,9 @@
             "name": "Syrj\u00e4inen",
             "planets": [
                 {
-                    "atmosphere": "",
-                    "biosphere": "",
-                    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet efficitur ante. Nam id odio nisl. Donec porta tempus augue, id porttitor dui auctor a. Nunc ultrices semper dui, porttitor tempor sem cursus viverra. Mauris laoreet pellentesque ipsum, malesuada ultricies nunc posuere blandit. Donec scelerisque consectetur justo. Sed vitae maximus mauris. Nunc et consectetur orci. Nullam nec ultricies libero, eget tempor dolor.\n\nMaecenas id euismod nisi, nec interdum diam. Mauris congue sapien id sem vestibulum, non commodo eros porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec posuere orci nec arcu consequat, non dignissim est blandit. Quisque aliquet diam augue, eget scelerisque odio consectetur in. Ut semper eu dolor nec varius. Etiam lacus dolor, congue quis euismod ut, finibus vel ligula. Quisque arcu ex, gravida non mattis ac, convallis id nisi. Nullam non fermentum erat. Nulla sodales tellus diam, at pharetra sapien dictum sit amet. Nulla varius dui magna, eu efficitur nisl blandit in. Vestibulum convallis finibus vestibulum. Vestibulum ac vulputate magna. \n\n\n",
+                    "atmosphere": "Inert gas",
+                    "biosphere": "Microbial life",
+                    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet efficitur ante. Nam id odio nisl. Donec porta tempus augue, id porttitor dui auctor a. Nunc ultrices semper dui, porttitor tempor sem cursus viverra. Mauris laoreet pellentesque ipsum, malesuada ultricies nunc posuere blandit. Donec scelerisque consectetur justo. Sed vitae maximus mauris. Nunc et consectetur orci. Nullam nec ultricies libero, eget tempor dolor.\n\nMaecenas id euismod nisi, nec interdum diam. Mauris congue sapien id sem vestibulum, non commodo eros porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec posuere orci nec arcu consequat, non dignissim est blandit. Quisque aliquet diam augue, eget scelerisque odio consectetur in. Ut semper eu dolor nec varius. Etiam lacus dolor, congue quis euismod ut, finibus vel ligula. Quisque arcu ex, gravida non mattis ac, convallis id nisi. Nullam non fermentum erat. Nulla sodales tellus diam, at pharetra sapien dictum sit amet. Nulla varius dui magna, eu efficitur nisl blandit in. Vestibulum convallis finibus vestibulum. Vestibulum ac vulputate magna. \n\n\n\n",
                     "name": "Kiert\u00e4v\u00e4",
                     "pop": "1",
                     "tags": [
@@ -101,20 +101,20 @@
                         "tag3",
                         "tag4"
                     ],
-                    "temperature": "",
-                    "tl": 0
+                    "temperature": "Temperate",
+                    "tl": "1 (Medieval)"
                 },
                 {
                     "atmosphere": "",
                     "biosphere": "",
-                    "desc": "asd\n'dsa\nad\n",
+                    "desc": "asd\n'dsa\nad\n\n",
                     "name": "Planeetta2",
                     "pop": "500",
                     "tags": [
                         "TagTag"
                     ],
                     "temperature": "",
-                    "tl": 2
+                    "tl": "2"
                 }
             ]
         }

@@ -19,13 +19,10 @@ class SectorController:
         self.cur_star = None
 
     def star_system_selected(self, coord):
-        print('star system selected')
         star = self.sector.get_star_by_coord(coord)
         if star:
             self.mainUI.purge_planet_info()
             for planet in star.get_planets():
-                print('planet info:', planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
-                      planet.tl)
                 self.mainUI.show_planet_info(planet.get_name(), planet.get_pop(), planet.get_desc(), planet.get_tags(),
                                              planet.tl, planet.atmosphere, planet.biosphere, planet.temperature)
 

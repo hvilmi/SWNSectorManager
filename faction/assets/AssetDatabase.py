@@ -21,15 +21,14 @@ class AssetDatabase:
                                     asset['asset_class'], asset['attack'], asset['counterattack'], asset['special'])
             self.asset_dict[asset['name']] = new_asset
 
-    def query(self, name='', type='', tl=0, asset_class='', max_level=8):
-        '''Queries loaded assets for those matching given criteria. If name argument is given, only queries for it.'''
+    def query(self, name='', type='', tl=10, asset_class='', max_cost=999, min_cost=0, max_level=8):
+        """Queries loaded assets for those matching given criteria. If name argument is given, only queries for it."""
         if name != '':
             return [self.asset_dict[name]]
         else:
             temp_assets = []
             for key, asset in self.asset_dict.items():
-                if type in asset.type and tl <= asset.tl and asset_class in asset.asset_class and int(max_level) >= int(
-                        asset.type[1:]):
+                if type in asset.type and asset.tl <= tl and asset_class in asset.asset_class and int(max_level) >= int(
+                                asset.type[1:] and max_cost >= asset.cost >= min_cost):
                     temp_assets.append(asset)
-                    print(asset.name)
             return temp_assets

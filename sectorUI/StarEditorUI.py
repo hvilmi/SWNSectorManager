@@ -51,13 +51,13 @@ class StarEditorUI:
         self.editor_ready = False
 
         self.current_coord = coord
-        if not self.edit_planets_window:
-            self.edit_planets_window = Toplevel()
-            self.edit_planets_window.title('Editing ' + star_name + ' system')
+        self.edit_planets_window = Toplevel()
+        self.edit_planets_window.title('Editing ' + star_name + ' system')
 
         if self.editor_nb:
             self.editor_nb.destroy()
             self.planet_info_list = []
+
         self.editor_nb = ttk.Notebook(self.edit_planets_window)
         self.editor_nb.grid(row=0, column=0, sticky=(N, W, E, S), columnspan=5)
 

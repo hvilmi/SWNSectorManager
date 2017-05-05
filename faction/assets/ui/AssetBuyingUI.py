@@ -28,6 +28,7 @@ class AssetBuyingUI:
         self.filter_bool = tk.BooleanVar()
         ttk.Checkbutton(main_frame, text="Filter Assets", var=self.filter_bool).grid(row=10, column=0)
         self.filter_bool.set(True)
+        self.filter_bool.trace('w', self.filter_change)
 
         self.cost_bool = tk.BooleanVar()
         ttk.Checkbutton(main_frame, text="Ignore Cost", var=self.cost_bool).grid(row=11, column=0)
@@ -80,8 +81,11 @@ class AssetBuyingUI:
         table_list = [self.cunning_assets_table, self.force_assets_table, self.wealth_assets_table]
         active_table = table_list[tmp_list.index(self.asset_nb.select())]
         chosen_asset_name = active_table.item(active_table.focus())['values'][0]
-        print("Chosen Asset name: " + chosen_asset_name)
         self.parent.acquire_asset(chosen_asset_name, self.world_selection.get(), self.cost_bool.get())
 
     def raise_error(self, error):
         self.error_text.set(error)
+
+    def filter_change(self, *args):
+        self.parent.reload_assets(self.filter_bool.get(), self.world_selection.get())
+

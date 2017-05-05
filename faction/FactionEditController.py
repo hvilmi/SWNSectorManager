@@ -42,11 +42,11 @@ class FactionEditController:
             except tk.TclError:
                 # Asset Window was closed
                 self.asset_window = AssetBuyingUI.AssetBuyingUI(self)
-                self.asset_window.insert_to_table('force',
-                                                  self.asset_db.query(type='F', max_level=self.cur_faction.force))
+                self.asset_window.filter_change()
         else:
             self.asset_window = AssetBuyingUI.AssetBuyingUI(self)
-            self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
+            # TODO: Implement cunning & wealth assets
+            self.asset_window.filter_change()
 
     def update_faction_ui(self):
         self.faction_ui.set_fields(self.cur_faction.name, self.cur_faction.hp,
@@ -123,8 +123,6 @@ class FactionEditController:
             refit_asset = self.asset_db.query(name=name)[0]
             refit_cost = int(refit_asset.cost) - int(self.cur_asset.base_asset.cost)
             if refit_cost > 0:
-                print("Refit cost:")
-                print(refit_cost)
                 self.faction_ui.show_refit_cost(refit_cost)
             else:
                 self.faction_ui.show_refit_cost(0)
@@ -132,3 +130,14 @@ class FactionEditController:
     def delete_cur_asset(self):
         self.cur_faction.assets.remove(self.cur_asset)
         self.show_assets()
+
+    def reload_assets(self, filter_bool: bool, world_name: str):
+        # TODO: Implement cunning & wealth assets
+        world_name = world_name.split(' - ')
+        planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
+        if filter_bool:
+            self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
+                                                                           tl=planet.get_tl(),
+                                                                           max_cost=int(self.cur_faction.fac_creds)))
+        else:
+            self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
