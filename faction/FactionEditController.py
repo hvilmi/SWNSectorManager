@@ -83,6 +83,9 @@ class FactionEditController:
         return occupied_planets + [SEPARATOR] + planets
 
     def show_assets(self):
+        if len(self.cur_faction.assets) == 0:
+            # No assets to show
+            return
         self.faction_ui.empty_table()
         self.asset_treeview_index = {}
         for asset_instance in self.cur_faction.assets:
@@ -133,8 +136,11 @@ class FactionEditController:
 
     def reload_assets(self, filter_bool: bool, world_name: str):
         # TODO: Implement cunning & wealth assets
-        world_name = world_name.split(' - ')
-        planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
+        if world_name == SEPARATOR:
+            filter_bool = False
+        else:
+            world_name = world_name.split(' - ')
+            planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
         if filter_bool:
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
                                                                            tl=planet.get_tl(),

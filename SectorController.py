@@ -53,7 +53,6 @@ class SectorController:
             name = self.editor_ui.create_name_window(coord)
 
     def save_star_system_from_editor(self):
-        print('Controller Save')
         edited_coord, planets_info = self.editor_ui.get_current_star_system()
         if self.sector.get_star_by_coord(edited_coord):
             new_star = self.sector.get_star_by_coord(edited_coord)

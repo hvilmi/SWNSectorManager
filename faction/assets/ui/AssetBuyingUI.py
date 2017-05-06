@@ -52,8 +52,10 @@ class AssetBuyingUI:
         asset_columns = ['Name', 'Level', 'hp', 'cost', 'tl', 'type', 'attack', 'counterattack', 'special']
         asset_table = ttk.Treeview(new_frame, columns=asset_columns)
         tvsort.make_treeview_sortable(asset_table, asset_columns)
-        for id in asset_columns:
-            asset_table.column(id, width=75, anchor='center')
+
+        column_widths = [125, 50, 30, 30, 30, 50, 75, 75, 75]
+        for id, col_width in zip(asset_columns, column_widths):
+            asset_table.column(id, width=col_width, anchor='center')
             asset_table.heading(id, text=id)
         asset_table['show'] = 'headings'
         asset_table.grid(column=0, row=0)
