@@ -39,6 +39,7 @@ class AssetBuyingUI:
         self.world_selection = tk.StringVar()
         tk.OptionMenu(main_frame, self.world_selection, *self.parent.get_asset_world_list()).grid(row=10, column=1)
         self.world_selection.set(self.parent.get_asset_world_list()[0])
+        self.world_selection.trace('w', self.filter_change)
 
         self.error_text = tk.StringVar()
         tk.Label(main_frame, textvariable=self.error_text).grid(row=12, column=1, columnspan=2)
@@ -87,6 +88,9 @@ class AssetBuyingUI:
 
     def raise_error(self, error):
         self.error_text.set(error)
+
+    def clear_error(self):
+        self.error_text.set('')
 
     def filter_change(self, *args):
         self.parent.reload_assets(self.filter_bool.get(), self.world_selection.get())

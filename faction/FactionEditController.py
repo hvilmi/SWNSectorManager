@@ -100,6 +100,9 @@ class FactionEditController:
         self.asset_chosen(list(self.asset_treeview_index.keys())[0])
 
     def asset_chosen(self, index):
+        if index not in self.asset_treeview_index.keys():
+            print('No asset in list')
+            return
         chosen_asset = self.cur_faction.get_asset_by_id(self.asset_treeview_index[index])
         refit_names = [asset.get_name() for asset in self.asset_db.query(type=chosen_asset.base_asset.get_type())]
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp,
@@ -107,6 +110,9 @@ class FactionEditController:
         self.cur_asset = chosen_asset
 
     def modify_asset(self, hp, location, refit_asset, refit_cost):
+
+        if self.cur_asset is None:
+            return
 
         self.cur_asset.cur_hp = hp
         self.cur_asset.set_location(location)
@@ -136,12 +142,14 @@ class FactionEditController:
 
     def reload_assets(self, filter_bool: bool, world_name: str):
         # TODO: Implement cunning & wealth assets
-        if world_name == SEPARATOR:
-            filter_bool = False
-        else:
-            world_name = world_name.split(' - ')
-            planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
         if filter_bool:
+            if world_name == SEPARATOR:
+                self.asset_window.raise_error(AssetBuyingUI.PLANET_ERROR)
+                return
+            else:
+                world_name = world_name.split(' - ')
+                planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
+
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
                                                                            tl=planet.get_tl(),
                                                                            max_cost=int(self.cur_faction.fac_creds)))
