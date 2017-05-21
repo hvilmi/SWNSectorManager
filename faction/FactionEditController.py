@@ -158,3 +158,18 @@ class FactionEditController:
                                                                            max_cost=int(self.cur_faction.fac_creds)))
         else:
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
+
+    def change_asset_location_choices(self, filter):
+        if not self.cur_asset:
+            return
+
+        if filter:
+            relocation_choices = self.cur_asset.get_relocation_choices()
+        else:
+            star_list = self.faction_controller.sector.stars
+            relocation_choices = []
+            for star in star_list:
+                for planet in star.planets:
+                    relocation_choices.append(star.name + ' - ' + planet.name)
+
+        self.faction_ui.insert_asset_location_choices(self.cur_asset.get_location(), relocation_choices)

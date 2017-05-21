@@ -75,6 +75,13 @@ class FactionEditUI:
                                                         *self.controller.get_asset_world_list())
         self.asset_location_option_menu.grid(row=0, column=1)
         tk.Label(self.asset_edit_frame, text="Current HP").grid(column=0, row=1)
+
+        self.asset_location_filter_var = tk.BooleanVar()
+        self.asset_location_filter_var.set(True)
+        self.asset_location_filter_var.trace('w', self.location_filter_changed)
+        tk.Checkbutton(self.asset_edit_frame, text="Normal movement",
+                       var=self.asset_location_filter_var).grid(row=0, column=2)
+
         self.asset_hp_entry = tk.Entry(self.asset_edit_frame)
         self.asset_hp_entry.grid(column=1, row=1)
 
@@ -107,13 +114,7 @@ class FactionEditUI:
         self.asset_refit_var.set(name)
 
         print(self.asset_location_option_menu)
-        self.asset_location_option_menu['menu'].delete(0, tk.END)
-        for loc in relocation_options:
-            self.asset_location_option_menu['menu'].add_command(label=loc, command=lambda _location=loc:
-                                                                self.asset_location_option_menu.setvar(
-                                                                    self.asset_location_option_menu.cget("textvariable")
-                                                                    , value=_location))
-        self.cur_asset_location.set(location)
+        self.insert_asset_location_choices(location, relocation_options)
 
     def set_fields(self, name='', hp='', fcreds='', force='', cunning='', wealth='', homeworld='\n'):
         """Sets values inserted in ui"""
@@ -179,3 +180,16 @@ class FactionEditUI:
 
     def asset_delete(self):
         self.controller.delete_cur_asset()
+
+    def location_filter_changed(self, *args):
+        self.controller.change_asset_location_choices(self.asset_location_filter_var.get())
+
+    def insert_asset_location_choices(self, location, relocation_options):
+
+        self.asset_location_option_menu['menu'].delete(0, tk.END)
+        for loc in relocation_options:
+            self.asset_location_option_menu['menu'].add_command(label=loc, command=lambda _location=loc:
+                                                                self.asset_location_option_menu.setvar(
+                                                                    self.asset_location_option_menu.cget("textvariable")
+                                                                    , value=_location))
+        self.cur_asset_location.set(location)

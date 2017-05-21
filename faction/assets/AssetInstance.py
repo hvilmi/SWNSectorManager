@@ -86,16 +86,18 @@ class AssetInstance:
             if self.y_coord > 0:
                 temp_coordinates.append((int(self.x_coord), int(self.y_coord) - 1))
                 temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord) - 1))
-                temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord)))
                 if self.x_coord > 0:
                     temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord) - 1))
                     temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord)))
             if self.y_coord < 9:
                 temp_coordinates.append((int(self.x_coord), int(self.y_coord) + 1))
+                temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord)))
 
         else:  # x coordinate is odd
             if self.x_coord < 7:
                 temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord)))
+                if self.y_coord < 9:
+                    temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord) + 1))
             if self.x_coord > 0:
                 temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord)))
             if self.y_coord < 9:
