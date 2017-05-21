@@ -4,8 +4,9 @@ from tkinter import filedialog
 import json
 import faction.Faction as Faction
 from faction.assets import AssetDatabase
+import faction.FactionController as FactionController
 
-CURRENT_VERSION = 2
+CURRENT_VERSION = 3
 
 
 class DatabaseController:
@@ -38,13 +39,16 @@ class DatabaseController:
                                                 planet['tl'], planet['atmosphere'], planet['biosphere'],
                                                 planet['temperature'])
                     self.sector.add_star(new_star)
+
+                temp_fac_controller = FactionController.FactionController([], self.sector)
                 for faction in sector_dict['factions']:
                     self.factions.append(
                         Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
-                                        faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld']))
+                                        faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld'],
+                                        temp_fac_controller))
                     for asset in faction['assets']:
                         self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
-                                                    asset_db.query(name=asset['name'])[0])
+                                                    asset_db.query(name=asset['name'])[0], asset['x'], asset['y'])
 
         except json.JSONDecodeError as e:
             print("Sector Decoding error: " + str(e))
@@ -95,7 +99,7 @@ class DatabaseController:
                 for asset in faction.assets:
                     faction_dict['assets'].append(
                         {'name': asset.get_name(), 'star': asset.star, 'planet': asset.planet,
-                         'cur_hp': asset.cur_hp})
+                         'cur_hp': asset.cur_hp, 'x': asset.x_coord, 'y': asset.y_coord})
                     print(faction_dict['assets'][-1])
                 sector_dict['factions'].append(faction_dict)
             json.dump(sector_dict, f, sort_keys=True, indent=4)
@@ -118,3 +122,22 @@ class DatabaseController:
                 for asset in faction['assets']:
                     self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
                                                 asset_db.query(name=asset['name'])[0])
+
+        elif sector_dict['version'] == 2:
+            for star in sector_dict['stars']:
+                new_star = StarSystem.StarSystem(name=star['name'], coord=star['coord'])
+                for planet in star['planets']:
+                    print(star['planets'])
+                    new_star.add_new_planet(planet['name'], planet['pop'], planet['desc'], planet['tags'],
+                                            planet['tl'], planet['atmosphere'], planet['biosphere'],
+                                            planet['temperature'])
+                self.sector.add_star(new_star)
+            temp_faction_controller = FactionController.FactionController([], self.sector)
+            for faction in sector_dict['factions']:
+                self.factions.append(
+                    Faction.Faction(faction['name'], faction['hp'], faction['force'], faction['cunning'],
+                                    faction['wealth'], faction['fac_creds'], faction['xp'], faction['homeworld'],
+                                    temp_faction_controller))
+                for asset in faction['assets']:
+                    self.factions[-1].add_asset(asset['star'], asset['planet'], asset['cur_hp'],
+                                                asset_db.query(name=asset['name'])[0], 0, 0)

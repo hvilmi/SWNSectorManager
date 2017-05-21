@@ -64,6 +64,7 @@ class AssetBuyingUI:
         return asset_table
 
     def insert_to_table(self, table_id, assets):
+        self.clear_error()
         """table id = 'cunning', 'force' or 'wealth' """
         table_dict = {'cunning': self.cunning_assets_table, 'force': self.force_assets_table,
                       'wealth': self.wealth_assets_table}
@@ -94,4 +95,3 @@ class AssetBuyingUI:
 
     def filter_change(self, *args):
         self.parent.reload_assets(self.filter_bool.get(), self.world_selection.get())
-

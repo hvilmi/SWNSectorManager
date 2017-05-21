@@ -10,13 +10,13 @@ SEPARATOR = '-------'
 
 class FactionEditController:
     def __init__(self, faction_controller, faction: Faction):
+        self.asset_window = None
         self.cur_asset = None
         self.faction_controller = faction_controller
         self.cur_faction = faction
         self.asset_db = AssetDatabase.AssetDatabase()
         self.faction_ui = FactionEditUI.FactionEditUI(self, faction.name, faction.hp, faction.force, faction.cunning,
                                                       faction.wealth, faction.fac_creds, faction.homeworld)
-        self.asset_window = None
 
         self.asset_treeview_index = {}
         self.show_assets()
@@ -59,10 +59,11 @@ class FactionEditController:
         try:
             star, planet = location.split(' - ')
             base_asset = self.asset_db.query(name=asset_name)[0]
+            x_coord, y_coord = self.faction_controller.sector.get_star_by_name(star).get_coord()
             if not ignore_cost:
                 if base_asset.cost <= int(self.cur_faction.fac_creds):
                     if self.faction_controller.sector.get_planet_by_name(planet).get_tl() >= base_asset.tl:
-                        self.cur_faction.add_new_asset(star, planet, base_asset)
+                        self.cur_faction.add_new_asset(star, planet, base_asset, x_coord, y_coord)
                         self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - base_asset.cost
                         self.update_faction_ui()
                     else:
@@ -70,7 +71,7 @@ class FactionEditController:
                 else:
                     self.asset_window.raise_error(AssetBuyingUI.COST_ERROR)
             else:
-                self.cur_faction.add_new_asset(star, planet, base_asset)
+                self.cur_faction.add_new_asset(star, planet, base_asset, x_coord, y_coord)
             self.show_assets()
         except ValueError:
             self.asset_window.raise_error(AssetBuyingUI.PLANET_ERROR)
@@ -100,13 +101,14 @@ class FactionEditController:
         self.asset_chosen(list(self.asset_treeview_index.keys())[0])
 
     def asset_chosen(self, index):
+        # TODO: Add setting options on location menu
         if index not in self.asset_treeview_index.keys():
             print('No asset in list')
             return
         chosen_asset = self.cur_faction.get_asset_by_id(self.asset_treeview_index[index])
         refit_names = [asset.get_name() for asset in self.asset_db.query(type=chosen_asset.base_asset.get_type())]
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp,
-                                       refit_names)
+                                       refit_names, chosen_asset.get_relocation_choices())
         self.cur_asset = chosen_asset
 
     def modify_asset(self, hp, location, refit_asset, refit_cost):
@@ -115,6 +117,7 @@ class FactionEditController:
             return
 
         self.cur_asset.cur_hp = hp
+        print(location[0])
         self.cur_asset.set_location(location)
         self.show_assets()
         if self.asset_db.query(name=refit_asset)[0] != self.cur_asset.base_asset:

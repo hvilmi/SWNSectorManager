@@ -7,9 +7,15 @@ class Sector:
         self.stars = []
         self.name = name
 
-    def get_star_by_coord(self, coord):
+    def get_star_by_coord(self, coord) -> StarSystem.StarSystem:
         for star in self.stars:
             if star.coord[0] == coord[0] and star.coord[1] == coord[1]:
+                return star
+        return None
+
+    def get_star_by_name(self, name) -> StarSystem.StarSystem:
+        for star in self.stars:
+            if star.name == name:
                 return star
         return None
 

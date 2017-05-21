@@ -3,7 +3,7 @@ from .assets import Asset
 
 
 class Faction:
-    def __init__(self, name, hp, force, cunning, wealth, fac_creds, xp, homeworld):
+    def __init__(self, name, hp, force, cunning, wealth, fac_creds, xp, homeworld, controller=None):
         self.name = name
         self.hp = hp
         self.force = force
@@ -14,16 +14,28 @@ class Faction:
         self.xp = xp
         self.homeworld = homeworld
 
+        print('Faction Controller set ', controller)
+        if controller is not None:
+            self.controller = controller
+            self.controller.factions.append(self)
+        else:
+            self.controller = None
+
     def get_level_with_string(self, string):
         levels = {'cunning': self.cunning, 'force': self.force, 'wealth': self.wealth}
         return levels[string]
 
-    def add_new_asset(self, star, planet, base_asset: Asset.Asset):
-        new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet, self.get_asset_id())
+    def add_new_asset(self, star, planet, base_asset: Asset.Asset, x_coord, y_coord):
+        new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet, self.get_asset_id(),
+                                                x_coord, y_coord)
         self.assets.append(new_asset)
 
-    def add_asset(self, star, planet, cur_hp, base_asset):
-        new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet, self.get_asset_id())
+    def add_asset(self, star, planet, cur_hp, base_asset, x_coord=None, y_coord=None):
+        if x_coord and y_coord:
+            new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet, self.get_asset_id(), x_coord,
+                                                    y_coord)
+        else:
+            new_asset = AssetInstance.AssetInstance(self, base_asset, cur_hp, star, planet, self.get_asset_id())
         self.assets.append(new_asset)
 
     def get_occupied_planets(self):

@@ -121,7 +121,7 @@ class MainUI:
         return (coord[0] * 10) + coord[1]
 
     def get_coord_by_id(self, id):
-        '''Returns integer coordinates (x,y) of a given hex id.'''
+        """Returns integer coordinates (x,y) of a given hex id."""
         return math.floor(float(id) / float(GRID_ROWS)), (id) % GRID_ROWS
 
     def get_real_coord_by_id(self, id):

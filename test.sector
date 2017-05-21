@@ -1,7 +1,14 @@
 {
     "factions": [
         {
-            "assets": [],
+            "assets": [
+                {
+                    "cur_hp": 4,
+                    "name": "Zealots",
+                    "planet": "Planet2",
+                    "star": "Star02"
+                }
+            ],
             "cunning": "0",
             "fac_creds": "0",
             "force": "5",

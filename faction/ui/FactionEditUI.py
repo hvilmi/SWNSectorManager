@@ -72,7 +72,8 @@ class FactionEditUI:
         tk.Label(self.asset_edit_frame, text="Location").grid(column=0, row=0)
         self.cur_asset_location = tk.StringVar()
         self.asset_location_option_menu = tk.OptionMenu(self.asset_edit_frame, self.cur_asset_location,
-                                                        *self.controller.get_asset_world_list()).grid(row=0, column=1)
+                                                        *self.controller.get_asset_world_list())
+        self.asset_location_option_menu.grid(row=0, column=1)
         tk.Label(self.asset_edit_frame, text="Current HP").grid(column=0, row=1)
         self.asset_hp_entry = tk.Entry(self.asset_edit_frame)
         self.asset_hp_entry.grid(column=1, row=1)
@@ -89,8 +90,8 @@ class FactionEditUI:
         tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
         tk.Button(self.asset_edit_frame, text='Delete Asset', command=self.asset_delete).grid(column=1, row=3)
 
-    def set_asset_info(self, name, location, hp, refit_options):
-        """Fills asset_edit_frame with information of chosen asset"""
+    def set_asset_info(self, name, location, hp, refit_options, relocation_options):
+        """Fills asset_edit_frame with information of chosen asset."""
         self.asset_edit_frame.config(text=name)
         self.cur_asset_location.set(location)
         self.asset_hp_entry.delete(0, tk.END)
@@ -104,6 +105,15 @@ class FactionEditUI:
                                                           self.asset_refit_menu.cget("textvariable"),
                                                           value=_asset))
         self.asset_refit_var.set(name)
+
+        print(self.asset_location_option_menu)
+        self.asset_location_option_menu['menu'].delete(0, tk.END)
+        for loc in relocation_options:
+            self.asset_location_option_menu['menu'].add_command(label=loc, command=lambda _location=loc:
+                                                                self.asset_location_option_menu.setvar(
+                                                                    self.asset_location_option_menu.cget("textvariable")
+                                                                    , value=_location))
+        self.cur_asset_location.set(location)
 
     def set_fields(self, name='', hp='', fcreds='', force='', cunning='', wealth='', homeworld='\n'):
         """Sets values inserted in ui"""
@@ -119,14 +129,13 @@ class FactionEditUI:
         self.cunning_entry.insert(tk.END, cunning)
         self.wealth_entry.delete(0, tk.END)
         self.wealth_entry.insert(tk.END, wealth)
-        print(homeworld)
         for i, planet_name in enumerate(self.controller.faction_controller.get_alphabetical_planet_list()):
-            print(planet_name)
             if homeworld in planet_name:
                 self.homeworld_selection.set(self.controller.faction_controller.get_alphabetical_planet_list()[i])
 
     def save_faction(self):
         # new_name, new_hp, new_force, new_cunning, new_wealth, new_facreds
+        # TODO: Add sending new coordinates
         self.controller.save_faction(self.name_entry.get(), self.hp_entry.get(), self.force_entry.get(),
                                      self.cunning_entry.get(), self.wealth_entry.get(), self.fcred_entry.get(),
                                      self.homeworld_selection.get())

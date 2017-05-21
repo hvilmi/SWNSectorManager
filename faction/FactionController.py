@@ -7,6 +7,8 @@ import faction.Faction as Faction
 class FactionController:
     def __init__(self, factions, sector):
         self.factions = factions
+        for faction in self.factions:
+            faction.controller = self
         self.sector = sector
         self.faction_treeview = None
 
@@ -21,7 +23,7 @@ class FactionController:
         print("No faction found")
 
     def add_new_faction(self):
-        self.factions.append(Faction.Faction('', 0, 0, 0, 0, 0, 0, ""))
+        self.factions.append(Faction.Faction('', 0, 0, 0, 0, 0, 0, "", self))
         faction_edit_ui = FactionEditController.FactionEditController(self, self.factions[-1])
 
     def register_faction_table(self, faction_treeview):
@@ -40,7 +42,7 @@ class FactionController:
         return self.sector.get_alphabetical_planet_list()
 
     def delete_faction(self, faction):
-        '''Takes Faction object or faction name as input and removes that faction.'''
+        """Takes Faction object or faction name as input and removes that faction."""
         if type(faction) == type(Faction.Faction('name', 0, 0, 0, 0, 0, 0, 'example planet')):
             self.factions.remove(faction)
         elif type(faction) == type('examplestring'):
