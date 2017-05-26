@@ -23,7 +23,7 @@ class FactionController:
         print("No faction found")
 
     def add_new_faction(self):
-        self.factions.append(Faction.Faction('', 0, 0, 0, 0, 0, 0, "", self))
+        Faction.Faction('', 0, 0, 0, 0, 0, 0, "", self)
         faction_edit_ui = FactionEditController.FactionEditController(self, self.factions[-1])
 
     def register_faction_table(self, faction_treeview):
@@ -33,6 +33,7 @@ class FactionController:
 
     def display_factions(self):
         self.faction_treeview.clear_factions()
+        print(self.factions)
         for faction in self.factions:
             self.faction_treeview.show_faction(name=faction.name, hp=faction.hp, force=faction.force,
                                                cunning=faction.cunning, wealth=faction.wealth, creds=faction.fac_creds,

@@ -14,10 +14,10 @@ class Faction:
         self.xp = xp
         self.homeworld = homeworld
 
-        print('Faction Controller set ', controller)
         if controller is not None:
             self.controller = controller
-            self.controller.factions.append(self)
+            if self not in self.controller.factions:
+                self.controller.factions.append(self)
         else:
             self.controller = None
 
