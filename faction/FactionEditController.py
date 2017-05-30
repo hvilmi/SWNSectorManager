@@ -16,18 +16,19 @@ class FactionEditController:
         self.cur_faction = faction
         self.asset_db = AssetDatabase.AssetDatabase()
         self.faction_ui = FactionEditUI.FactionEditUI(self, faction.name, faction.hp, faction.force, faction.cunning,
-                                                      faction.wealth, faction.fac_creds, faction.homeworld)
+                                                      faction.wealth, faction.fac_creds, faction.xp, faction.homeworld)
 
         self.asset_treeview_index = {}
         self.show_assets()
 
-    def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, homeworld):
+    def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, xp, homeworld):
         self.cur_faction.name = new_name
         self.cur_faction.hp = new_hp
         self.cur_faction.cunning = new_cunning
         self.cur_faction.force = new_force
         self.cur_faction.wealth = new_wealth
         self.cur_faction.fac_creds = new_fcreds
+        self.cur_faction.xp = xp
         if homeworld:
             self.cur_faction.homeworld = homeworld
         self.faction_controller.display_factions()
@@ -53,6 +54,7 @@ class FactionEditController:
                                    self.cur_faction.fac_creds,
                                    self.cur_faction.force, self.cur_faction.cunning,
                                    self.cur_faction.wealth,
+                                   self.cur_faction.xp,
                                    self.cur_faction.homeworld)
 
     def acquire_asset(self, asset_name, location, ignore_cost):

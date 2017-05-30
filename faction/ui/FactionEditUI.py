@@ -4,7 +4,7 @@ import sectorUI.treeviewsort as tvsort
 
 
 class FactionEditUI:
-    def __init__(self, controller, name='', hp='', force='', cunning='', wealth='', fcreds='', homeworld='\n'):
+    def __init__(self, controller, name='', hp='', force='', cunning='', wealth='', fcreds='', xp='', homeworld='\n'):
         self.controller = controller
 
         self.main_window = tk.Toplevel()
@@ -36,12 +36,16 @@ class FactionEditUI:
         self.wealth_entry = tk.Entry(main_frame)
         self.wealth_entry.grid(column=5, row=1)
 
-        tk.Label(main_frame, text='Homeworld:').grid(column=6, row=0)
+        tk.Label(main_frame, text='XP:').grid(column=6, row=0)
+        self.xp_entry = tk.Entry(main_frame)
+        self.xp_entry.grid(column=7, row=0)
+
+        tk.Label(main_frame, text='Homeworld:').grid(column=8, row=0)
         self.homeworld_selection = tk.StringVar('')
         tk.OptionMenu(main_frame, self.homeworld_selection,
-                      *self.controller.faction_controller.get_alphabetical_planet_list()).grid(column=7, row=0)
+                      *self.controller.faction_controller.get_alphabetical_planet_list()).grid(column=9, row=0)
 
-        self.set_fields(name, hp, fcreds, force, cunning, wealth, homeworld)
+        self.set_fields(name, hp, fcreds, force, cunning, wealth, xp, homeworld)
 
         tk.Button(main_frame, text='Buy Assets', command=self.open_asset_window).grid(column=6, row=1)
 
@@ -116,7 +120,7 @@ class FactionEditUI:
         print(self.asset_location_option_menu)
         self.insert_asset_location_choices(location, relocation_options)
 
-    def set_fields(self, name='', hp='', fcreds='', force='', cunning='', wealth='', homeworld='\n'):
+    def set_fields(self, name='', hp='', fcreds='', force='', cunning='', wealth='', xp='', homeworld='\n'):
         """Sets values inserted in ui"""
         self.name_entry.delete(0, tk.END)
         self.name_entry.insert(tk.END, name)
@@ -130,6 +134,8 @@ class FactionEditUI:
         self.cunning_entry.insert(tk.END, cunning)
         self.wealth_entry.delete(0, tk.END)
         self.wealth_entry.insert(tk.END, wealth)
+        self.xp_entry.delete(0, tk.END)
+        self.xp_entry.insert(tk.END, xp)
         for i, planet_name in enumerate(self.controller.faction_controller.get_alphabetical_planet_list()):
             if homeworld in planet_name:
                 self.homeworld_selection.set(self.controller.faction_controller.get_alphabetical_planet_list()[i])
@@ -139,7 +145,7 @@ class FactionEditUI:
         # TODO: Add sending new coordinates
         self.controller.save_faction(self.name_entry.get(), self.hp_entry.get(), self.force_entry.get(),
                                      self.cunning_entry.get(), self.wealth_entry.get(), self.fcred_entry.get(),
-                                     self.homeworld_selection.get())
+                                     self.xp_entry.get(), self.homeworld_selection.get())
 
     def close(self):
         self.main_window.destroy()

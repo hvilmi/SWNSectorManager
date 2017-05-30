@@ -67,7 +67,7 @@ class DatabaseController:
     def get_factions(self):
         return self.factions
 
-    def save_sector(self, new_file=False) -> int:
+    def save_sector(self, new_file=False):
         """Saves current sector and factions in .sector -file.
             Returns 0 if successful, 1 if no file was specified."""
         if self.path == '' or new_file:
@@ -103,7 +103,7 @@ class DatabaseController:
                     print(faction_dict['assets'][-1])
                 sector_dict['factions'].append(faction_dict)
             json.dump(sector_dict, f, sort_keys=True, indent=4)
-            return 0
+        return 0
 
     def old_load(self, sector_dict, asset_db):
         if sector_dict['version'] == 1:
