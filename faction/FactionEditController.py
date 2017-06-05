@@ -46,7 +46,6 @@ class FactionEditController:
                 self.asset_window.filter_change()
         else:
             self.asset_window = AssetBuyingUI.AssetBuyingUI(self)
-            # TODO: Implement cunning & wealth assets
             self.asset_window.filter_change()
 
     def update_faction_ui(self):
@@ -146,7 +145,6 @@ class FactionEditController:
         self.show_assets()
 
     def reload_assets(self, filter_bool: bool, world_name: str):
-        # TODO: Implement cunning & wealth assets
         if filter_bool:
             if world_name == SEPARATOR:
                 self.asset_window.raise_error(AssetBuyingUI.PLANET_ERROR)
@@ -158,8 +156,21 @@ class FactionEditController:
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
                                                                            tl=planet.get_tl(),
                                                                            max_cost=int(self.cur_faction.fac_creds)))
+            self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C',
+                                                                             max_level=self.cur_faction.cunning,
+                                                                             tl=planet.get_tl(),
+                                                                             max_cost=int(self.cur_faction.fac_creds)))
+            self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W',
+                                                                            max_level=self.cur_faction.wealth,
+                                                                            tl=planet.get_tl(),
+                                                                            max_cost=int(self.cur_faction.fac_creds)))
         else:
-            self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force))
+            self.asset_window.insert_to_table('force', self.asset_db.query(type='F',
+                                                                           max_level=self.cur_faction.force))
+            self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C',
+                                                                             max_level=self.cur_faction.cunning))
+            self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W',
+                                                                            max_level=self.cur_faction.wealth))
 
     def change_asset_location_choices(self, filter):
         if not self.cur_asset:

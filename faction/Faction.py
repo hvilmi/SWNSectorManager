@@ -26,14 +26,14 @@ class Faction:
         return levels[string]
 
     def add_new_asset(self, star, planet, base_asset: Asset.Asset, x_coord, y_coord):
-        new_asset = AssetInstance.AssetInstance(base_asset, base_asset.max_hp, star, planet, self.get_asset_id(),
+        new_asset = AssetInstance.AssetInstance(self, base_asset, base_asset.max_hp, star, planet, self.get_asset_id(),
                                                 x_coord, y_coord)
         self.assets.append(new_asset)
 
     def add_asset(self, star, planet, cur_hp, base_asset, x_coord=None, y_coord=None):
         if x_coord and y_coord:
-            new_asset = AssetInstance.AssetInstance(base_asset, cur_hp, star, planet, self.get_asset_id(), x_coord,
-                                                    y_coord)
+            new_asset = AssetInstance.AssetInstance(self, base_asset, cur_hp, star, planet, self.get_asset_id(),
+                                                    x_coord, y_coord)
         else:
             new_asset = AssetInstance.AssetInstance(self, base_asset, cur_hp, star, planet, self.get_asset_id())
         self.assets.append(new_asset)

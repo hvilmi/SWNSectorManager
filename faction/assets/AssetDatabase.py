@@ -5,9 +5,9 @@ from . import Asset
 class AssetDatabase:
     def __init__(self):
         self.asset_dict = {}
-        # self.load_assets('cunning.assets')
+        self.load_assets('cunning.assets')
         self.load_assets('force.assets')
-        # self.load_assets('wealth.assets')
+        self.load_assets('wealth.assets')
 
     def load_assets(self, file_name):
         """Loads a file containing assets in json format and outputs them as objects."""
