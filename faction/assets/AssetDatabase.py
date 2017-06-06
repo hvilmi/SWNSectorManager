@@ -28,7 +28,6 @@ class AssetDatabase:
         else:
             temp_assets = []
             for key, asset in self.asset_dict.items():
-                if type in asset.type and asset.tl <= tl and asset_class in asset.asset_class and int(max_level) >= int(
-                                asset.type[1:] and max_cost >= asset.cost >= min_cost):
+                if type in asset.type and asset.tl <= tl and asset_class in asset.asset_class and int(max_level) >= int(asset.type[1:]) and max_cost >= asset.cost >= min_cost:
                     temp_assets.append(asset)
             return temp_assets
