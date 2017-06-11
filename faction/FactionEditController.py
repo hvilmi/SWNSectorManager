@@ -85,11 +85,12 @@ class FactionEditController:
         return occupied_planets + [SEPARATOR] + planets
 
     def show_assets(self):
+        self.faction_ui.empty_table()
+        self.asset_treeview_index = {}
         if len(self.cur_faction.assets) == 0:
             # No assets to show
             return
-        self.faction_ui.empty_table()
-        self.asset_treeview_index = {}
+
         for asset_instance in self.cur_faction.assets:
             base_asset = asset_instance.base_asset
             treeview_id = self.faction_ui.show_asset(base_asset.name, base_asset.asset_class,
@@ -102,7 +103,6 @@ class FactionEditController:
         self.asset_chosen(list(self.asset_treeview_index.keys())[0])
 
     def asset_chosen(self, index):
-        # TODO: Add setting options on location menu
         if index not in self.asset_treeview_index.keys():
             print('No asset in list')
             return
@@ -153,6 +153,8 @@ class FactionEditController:
                 world_name = world_name.split(' - ')
                 planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
 
+            print('reload assets', self.cur_faction.force, planet.get_tl(), self.cur_faction.fac_creds)
+
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
                                                                            tl=planet.get_tl(),
                                                                            max_cost=int(self.cur_faction.fac_creds)))
@@ -165,12 +167,10 @@ class FactionEditController:
                                                                             tl=planet.get_tl(),
                                                                             max_cost=int(self.cur_faction.fac_creds)))
         else:
-            self.asset_window.insert_to_table('force', self.asset_db.query(type='F',
-                                                                           max_level=self.cur_faction.force))
-            self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C',
-                                                                             max_level=self.cur_faction.cunning))
-            self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W',
-                                                                            max_level=self.cur_faction.wealth))
+            print('Query without filter')
+            self.asset_window.insert_to_table('force', self.asset_db.query(type='F'))
+            self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C'))
+            self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W'))
 
     def change_asset_location_choices(self, filter):
         if not self.cur_asset:

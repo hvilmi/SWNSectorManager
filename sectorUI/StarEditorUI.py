@@ -146,9 +146,10 @@ class StarEditorUI:
 
     def send_changes(self):
         self.parent.save_star_system_from_editor()
+        self.close_window()
 
     def discard_changes(self):
-        pass
+        self.close_window()
 
     def get_current_star_system(self):
         """Function returns a list containing information of current star system"""
@@ -185,4 +186,7 @@ class StarEditorUI:
         self.planet_info_list.pop(index)
         self.editor_nb.select(self.editor_nb.tabs()[0])
         self.editor_nb.forget(self.editor_nb.tabs()[index])
+
+    def close_window(self):
+        self.edit_planets_window.destroy()
 
