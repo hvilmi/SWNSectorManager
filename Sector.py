@@ -1,11 +1,13 @@
 import Planet
 import StarSystem
+import sector.SectorPathfinder as pathfinder
 
 
 class Sector:
     def __init__(self, name=''):
         self.stars = []
         self.name = name
+        self.pathfinder = pathfinder.SectorPathfinder(8, 10)
 
     def get_star_by_coord(self, coord) -> StarSystem.StarSystem:
         for star in self.stars:
@@ -53,3 +55,23 @@ class Sector:
 
     def delete_star(self, star):
         self.stars.remove(star)
+
+    def get_star_vicinity(self, star):
+        if type(star) is StarSystem.StarSystem:
+            coord = star.coord
+        elif type(star) is str:
+            coord = self.get_star_by_name(star)
+        else:
+            coord = star
+
+        neighbours = self.pathfinder.get_neighbours(*coord)
+        neighbour_list = []
+        for neighbour in neighbours:
+            if self.get_star_by_coord(neighbour.coord):
+                star = self.get_star_by_coord(neighbour.coord)
+                for planet in star.planets:
+                    neighbour_list.append(star.name + ' - ' + planet.name)
+            else:
+                neighbour_list.append('0' + str(neighbour.coord[0]) + '0' + str(neighbour.coord[1]))
+
+        return neighbour_list
