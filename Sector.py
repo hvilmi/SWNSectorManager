@@ -66,6 +66,11 @@ class Sector:
 
         neighbours = self.pathfinder.get_neighbours(*coord)
         neighbour_list = []
+
+        if self.get_star_by_coord(coord):
+            for planet in self.get_star_by_coord(coord).planets:
+                neighbour_list.append(self.get_star_by_coord(coord).name + ' - ' + planet.name)
+
         for neighbour in neighbours:
             if self.get_star_by_coord(neighbour.coord):
                 star = self.get_star_by_coord(neighbour.coord)

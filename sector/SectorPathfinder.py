@@ -6,6 +6,7 @@ class SectorPathfinder:
         self.width = width
         self.height = height
         self.hexagons = []
+        self.generate_hexagrid()
 
     def generate_hexagrid(self):
         """Generates a grid of hexagons with correct neighbours and sets i as self.hexagons"""
@@ -50,9 +51,9 @@ class SectorPathfinder:
         # TODO: Implement suitable path finding algorithm
 
     def get_neighbours(self, x, y):
-        neighbour_list = self.hexagons[x][y]
+        neighbour_list = self.hexagons[x][y].neighbours
         final_list = []
-        for hexagon in neighbour_list:
-            final_list.append(hexagon[0])
+        for neighbour in neighbour_list:
+            final_list.append(neighbour[0])
         return final_list
 

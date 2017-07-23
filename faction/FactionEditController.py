@@ -153,14 +153,12 @@ class FactionEditController:
                 world_name = world_name.split(' - ')
                 planet = self.faction_controller.sector.get_planet_by_name(world_name[1])
 
-            print('reload assets', self.cur_faction.force, planet.get_tl(), self.cur_faction.fac_creds)
-
             self.asset_window.insert_to_table('force', self.asset_db.query(type='F', max_level=self.cur_faction.force,
                                                                            tl=planet.get_tl(),
                                                                            max_cost=int(self.cur_faction.fac_creds)))
             self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C',
                                                                              max_level=self.cur_faction.cunning,
-                                                                             tl=planet.get_tl(),
+                                                                               tl=planet.get_tl(),
                                                                              max_cost=int(self.cur_faction.fac_creds)))
             self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W',
                                                                             max_level=self.cur_faction.wealth,

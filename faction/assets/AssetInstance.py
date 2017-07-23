@@ -81,41 +81,8 @@ class AssetInstance:
         First row of elements of list are in format 0x0y' when hexagon is empty and 'Star - planet' when hexagon
         contains a star.
         Second row is x and y coordinates of the option"""
-        temp_coordinates = []
-        if self.x_coord % 2 == 0:  # x coordinate is even
-            if self.y_coord > 0:
-                temp_coordinates.append((int(self.x_coord), int(self.y_coord) - 1))
-                temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord) - 1))
-                if self.x_coord > 0:
-                    temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord) - 1))
-                    temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord)))
-            if self.y_coord < 9:
-                temp_coordinates.append((int(self.x_coord), int(self.y_coord) + 1))
-                temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord)))
 
-        else:  # x coordinate is odd
-            if self.x_coord < 7:
-                temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord)))
-                if self.y_coord < 9:
-                    temp_coordinates.append((int(self.x_coord) + 1, int(self.y_coord) + 1))
-            if self.x_coord > 0:
-                temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord)))
-            if self.y_coord < 9:
-                temp_coordinates.append((int(self.x_coord), int(self.y_coord) + 1))
-                if self.x_coord > 0:
-                    temp_coordinates.append((int(self.x_coord) - 1, int(self.y_coord) + 1))
-            if self.y_coord > 0:
-                temp_coordinates.append((int(self.x_coord), int(self.y_coord) - 1))
-
-        location_list = []
-        for x, y in temp_coordinates:
-            star = self.get_sector().get_star_by_coord((x, y))
-            if star:
-                for planet in star.planets:
-                    location_list.append(star.name + ' - ' + planet.name)
-            else:
-                location_list.append("0" + str(x) + "0" + str(y))
-        return location_list
+        return self.get_sector().get_star_vicinity([self.x_coord, self.y_coord])
 
     def get_sector(self) -> Sector.Sector:
         return self.parent.controller.sector

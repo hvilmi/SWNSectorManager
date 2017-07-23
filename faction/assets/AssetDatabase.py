@@ -17,7 +17,6 @@ class AssetDatabase:
 
         assets = {}
         for asset in temp_dict:
-            print(asset)
             new_asset = Asset.Asset(asset['name'], asset['type'], asset['hp'], asset['cost'], asset['tl'],
                                     asset['asset_class'], asset['attack'], asset['counterattack'], asset['special'])
             self.asset_dict[asset['name']] = new_asset
@@ -31,6 +30,6 @@ class AssetDatabase:
             for key, asset in self.asset_dict.items():
                 if type in asset.type and asset.tl <= tl and asset_class in asset.asset_class and int(max_level) >= int(asset.type[1:]) and max_cost >= asset.cost >= min_cost:
                     temp_assets.append(asset)
-            print('Query criteria: name=', name, 'type=', type, 'tl=', tl, 'class=', asset_class, 'max cost=', max_cost, 'min cost=', min_cost, 'max level', max_level)
-            print('Query result:', temp_assets)
+            # print('Query criteria: name=', name, 'type=', type, 'tl=', tl, 'class=', asset_class, 'max cost=',
+            #       max_cost, 'min cost=', min_cost, 'max level', max_level)
             return temp_assets
