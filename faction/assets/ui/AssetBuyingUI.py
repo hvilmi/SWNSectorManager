@@ -73,8 +73,8 @@ class AssetBuyingUI:
 
         for asset in assets:
             # Asset has special cost, hp or tech level
-            cur_table.insert('', 'end', values=[asset.name, asset.type, asset.max_hp, asset.cost,
-                                                asset.tl, asset.type, asset.attack, asset.counterattack,
+            cur_table.insert('', 'end', values=[asset.name, asset.type[1], asset.max_hp, asset.cost,
+                                                asset.tl, asset.type[0], asset.attack, asset.counterattack,
                                                 asset.special])
 
     def bring_to_front(self):
