@@ -39,10 +39,15 @@ class Faction:
         print('Appending new asset')
         self.assets.append(new_asset)
 
-    def get_occupied_planets(self):
+    def get_occupied_planets(self, show_all=False):
+        """Returns a list of locations in which faction has base of influence or if show_all is True, any asset."""
         locations = []
         for asset_instance in self.assets:
-            locations.append(asset_instance.get_location())
+            if show_all:
+                locations.append(asset_instance.get_location())
+            else:
+                if asset_instance.base_asset.name == 'Base of Influence':
+                    locations.append(asset_instance.get_location())
         # Convert list of asset locations to a set and back to list to remove duplicates
         return list(set(locations))
 
