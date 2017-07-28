@@ -36,6 +36,7 @@ class Faction:
                                                     x_coord, y_coord)
         else:
             new_asset = AssetInstance.AssetInstance(self, base_asset, cur_hp, star, planet, self.get_asset_id())
+        print('Appending new asset')
         self.assets.append(new_asset)
 
     def get_occupied_planets(self):

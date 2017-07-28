@@ -9,6 +9,8 @@ class AssetDatabase:
         self.load_assets('force.assets')
         self.load_assets('wealth.assets')
 
+        self.boi_base = Asset.Asset('Base of Influence', '*', 1, '*', 0, 'Special', 'None', 'None', 'S')
+
     def load_assets(self, file_name):
         """Loads a file containing assets in json format and outputs them as objects."""
 
@@ -24,7 +26,10 @@ class AssetDatabase:
     def query(self, name='', type='', tl=10, asset_class='', max_cost=999, min_cost=0, max_level=8):
         """Queries loaded assets for those matching given criteria. If name argument is given, only queries for it."""
         if name != '':
-            return [self.asset_dict[name]]
+            if name == self.boi_base.name:
+                return self.boi_base
+            else:
+                return [self.asset_dict[name]]
         else:
             temp_assets = []
             for key, asset in self.asset_dict.items():

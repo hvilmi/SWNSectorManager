@@ -101,6 +101,11 @@ class FactionEditUI:
         tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
         tk.Button(self.asset_edit_frame, text='Delete Asset', command=self.asset_delete).grid(column=1, row=3)
 
+        # Frame for faction actions
+        action_frame = tk.LabelFrame(main_frame, text='Actions')
+        action_frame.grid(column=7, row=5)
+        tk.Button(action_frame, text='Add Base of Influence', command=self.add_boi).grid(column=0, row=0)
+
     def set_asset_info(self, name, location, hp, refit_options, relocation_options):
         """Fills asset_edit_frame with information of chosen asset."""
         self.asset_edit_frame.config(text=name)
@@ -195,7 +200,10 @@ class FactionEditUI:
         self.asset_location_option_menu['menu'].delete(0, tk.END)
         for loc in relocation_options:
             self.asset_location_option_menu['menu'].add_command(label=loc, command=lambda _location=loc:
-                                                                self.asset_location_option_menu.setvar(
-                                                                    self.asset_location_option_menu.cget("textvariable")
-                                                                    , value=_location))
+            self.asset_location_option_menu.setvar(
+                self.asset_location_option_menu.cget("textvariable")
+                , value=_location))
         self.cur_asset_location.set(location)
+
+    def add_boi(self):
+        self.controller.create_boi_adder()

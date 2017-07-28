@@ -4,6 +4,7 @@ from faction.assets import AssetDatabase
 from faction.assets.ui import AssetBuyingUI
 from faction.ui import FactionEditUI
 from faction import Faction
+import faction.assets.boi.BoIAdder as BoIAdder
 
 SEPARATOR = '-------'
 
@@ -78,7 +79,8 @@ class FactionEditController:
             self.asset_window.raise_error(AssetBuyingUI.PLANET_ERROR)
 
     def get_asset_world_list(self):
-        """Returns list of planets on sector where current faction can acquire assets followed by rest of the worlds"""
+        """Returns list of planets on sector where current faction can acquire assets followed by rest of the worlds.
+        Current implementation lists worlds in which faction has any assets."""
         planets = self.faction_controller.get_alphabetical_planet_list()
         occupied_planets = list(self.cur_faction.get_occupied_planets())
         planets = sorted(list(set(occupied_planets) ^ set(planets)))
@@ -87,6 +89,7 @@ class FactionEditController:
     def show_assets(self):
         self.faction_ui.empty_table()
         self.asset_treeview_index = {}
+        print('Faction assets', self.cur_faction.assets)
         if len(self.cur_faction.assets) == 0:
             # No assets to show
             return
@@ -158,7 +161,7 @@ class FactionEditController:
                                                                            max_cost=int(self.cur_faction.fac_creds)))
             self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C',
                                                                              max_level=self.cur_faction.cunning,
-                                                                               tl=planet.get_tl(),
+                                                                             tl=planet.get_tl(),
                                                                              max_cost=int(self.cur_faction.fac_creds)))
             self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W',
                                                                             max_level=self.cur_faction.wealth,
@@ -184,3 +187,6 @@ class FactionEditController:
                     relocation_choices.append(star.name + ' - ' + planet.name)
 
         self.faction_ui.insert_asset_location_choices(self.cur_asset.get_location(), relocation_choices)
+
+    def create_boi_adder(self):
+        self.boi_adder = BoIAdder.BoIAdder(self)
