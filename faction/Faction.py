@@ -21,6 +21,8 @@ class Faction:
         else:
             self.controller = None
 
+        self.max_id = -1
+
     def get_level_with_string(self, string):
         levels = {'cunning': self.cunning, 'force': self.force, 'wealth': self.wealth}
         return levels[string]
@@ -52,7 +54,8 @@ class Faction:
         return list(set(locations))
 
     def get_asset_id(self):
-        return len(self.assets)
+        self.max_id += 1
+        return self.max_id
 
     def get_asset_by_id(self, id):
         for asset in self.assets:

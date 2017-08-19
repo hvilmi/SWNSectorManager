@@ -10,7 +10,7 @@ class BoIAdder:
     def acquire_boi(self, cost, location, ignore_cost=False):
         try:
             star, planet = location.split(' - ')
-            base_asset = self.controller.asset_db.query(name="Base of Influence")
+            base_asset = self.controller.asset_db.query(name="Base of Influence")[0]
             if not ignore_cost:
                 if cost <= int(self.controller.cur_faction.fac_creds):
                         self.controller.cur_faction.add_asset(star, planet, cost, base_asset)

@@ -27,7 +27,7 @@ class AssetDatabase:
         """Queries loaded assets for those matching given criteria. If name argument is given, only queries for it."""
         if name != '':
             if name == self.boi_base.name:
-                return self.boi_base
+                return [self.boi_base]
             else:
                 return [self.asset_dict[name]]
         else:

@@ -1,5 +1,6 @@
 import faction.FactionEditController as FactionEditController
 import faction.Faction as Faction
+import faction.assets.AssetInstance
 
 
 # name, hp, force, cunning, wealth, fac_creds, xp, homeworld
@@ -44,12 +45,26 @@ class FactionController:
 
     def delete_faction(self, faction):
         """Takes Faction object or faction name as input and removes that faction."""
-        if type(faction) == type(Faction.Faction('name', 0, 0, 0, 0, 0, 0, 'example planet')):
+        if isinstance(faction, Faction.Faction):
             self.factions.remove(faction)
-        elif type(faction) == type('examplestring'):
+        elif isinstance(faction, str):
             self.factions.remove(self.get_faction_by_name(faction))
         self.display_factions()
 
     def clear(self):
         self.factions = []
         self.faction_treeview.clear_factions()
+
+    def get_assets_in_location(self, location: [int, int], planet=None) -> [faction.assets.AssetInstance]:
+        asset_list = []
+        for faction_instance in self.factions:
+            for asset_instance in faction_instance.assets:
+                if asset_instance.x_coord == location[0] and asset_instance.y_coord == location[1]:
+                    asset_list.append(asset_instance)
+
+        if planet is not None:
+            for asset_instance in asset_list:
+                if asset_instance.planet != planet:
+                    asset_list.remove(asset_instance)
+
+        return asset_list
