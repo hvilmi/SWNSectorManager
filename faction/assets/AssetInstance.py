@@ -86,3 +86,10 @@ class AssetInstance:
 
     def get_sector(self) -> Sector.Sector:
         return self.parent.controller.sector
+
+    def get_nearby_assets(self):
+        if self.planet:
+            targets = self.parent.controller.get_assets_in_location([self.x_coord, self.y_coord], self.planet)
+        else:
+            targets = self.parent.controller.get_assets_in_location([self.x_coord, self.y_coord], self.planet)
+        return targets
