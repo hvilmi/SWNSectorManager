@@ -14,11 +14,13 @@ class ActionUI(tk.Toplevel):
         actor_choice = tk.StringVar()
         self.actor_combobox = ttk.Combobox(main_frame, textvariable=actor_choice, values=aasset_names)
         self.actor_combobox.bind('<<ComboboxSelected>>', self.actor_selected)
+        self.actor_combobox.grid(column=0, row=0)
 
         self.targets_table = ttk.Treeview(main_frame, columns=['hp'])
+        self.targets_table.grid(column=0, row=1, columnspan=3)
         self.target_list = []
 
-    def actor_selected(self):
+    def actor_selected(self, *args):
         self.parent.set_chosen_actor_asset(self.actor_combobox.current())
 
     def target_selected(self):

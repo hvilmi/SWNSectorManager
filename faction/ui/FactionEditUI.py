@@ -105,6 +105,7 @@ class FactionEditUI:
         action_frame = tk.LabelFrame(main_frame, text='Actions')
         action_frame.grid(column=7, row=5)
         tk.Button(action_frame, text='Add Base of Influence', command=self.add_boi).grid(column=0, row=0)
+        tk.Button(action_frame, text='Asset action', command=self.action_clicked).grid(column=0, row=1)
 
     def set_asset_info(self, name, location, hp, refit_options, relocation_options):
         """Fills asset_edit_frame with information of chosen asset."""
@@ -207,3 +208,6 @@ class FactionEditUI:
 
     def add_boi(self):
         self.controller.create_boi_adder()
+
+    def action_clicked(self):
+        self.controller.create_action_controller()

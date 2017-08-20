@@ -5,6 +5,7 @@ from faction.assets.ui import AssetBuyingUI
 from faction.ui import FactionEditUI
 from faction import Faction
 import faction.assets.boi.BoIAdder as BoIAdder
+import faction.action.controller
 
 SEPARATOR = '-------'
 
@@ -21,6 +22,9 @@ class FactionEditController:
 
         self.asset_treeview_index = {}
         self.show_assets()
+
+        self.boi_adder = None
+        self.action_controller = None
 
     def save_faction(self, new_name, new_hp, new_force, new_cunning, new_wealth, new_fcreds, xp, homeworld):
         self.cur_faction.name = new_name
@@ -135,6 +139,8 @@ class FactionEditController:
     def refit_choice_changed(self, name):
         if self.cur_asset is None:
             pass
+        elif self.cur_asset.base_asset.cost == '*':
+            self.faction_ui.show_refit_cost('*')
         else:
             refit_asset = self.asset_db.query(name=name)[0]
             refit_cost = int(refit_asset.cost) - int(self.cur_asset.base_asset.cost)
@@ -190,3 +196,6 @@ class FactionEditController:
 
     def create_boi_adder(self):
         self.boi_adder = BoIAdder.BoIAdder(self)
+
+    def create_action_controller(self):
+        self.action_controller = faction.action.controller.ActionController(self.cur_faction)
