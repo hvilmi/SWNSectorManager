@@ -7,4 +7,4 @@ class ActionController:
         self.ui = faction.action.ui.action_ui.ActionUI(self, self.faction.assets)
 
     def set_chosen_actor_asset(self, index):
-        print('test')
+        self.ui.populate_target_table(self.faction.assets[index].get_nearby_assets())
