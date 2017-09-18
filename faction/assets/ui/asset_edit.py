@@ -18,7 +18,7 @@ class AssetEditUI:
 
         self.asset_location_filter_var = tk.BooleanVar()
         self.asset_location_filter_var.set(True)
-        # self.asset_location_filter_var.trace('w', self.location_filter_changed)
+        self.asset_location_filter_var.trace('w', self.location_filter_changed)
         tk.Checkbutton(self.asset_edit_frame, text="Normal movement",
                        var=self.asset_location_filter_var).grid(row=0, column=2)
 
@@ -46,7 +46,7 @@ class AssetEditUI:
         self.refit_price.set(cost)
 
     def location_filter_changed(self, *args):
-        self.controller.change_asset_location_choices(self.asset_location_filter_var.get())
+        self.controller.change_asset_location_choices(self.asset_location_filter_var.get(), self)
 
     def insert_asset_location_choices(self, location, relocation_options):
         self.asset_location_option_menu['menu'].delete(0, tk.END)

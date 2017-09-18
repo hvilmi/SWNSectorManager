@@ -179,7 +179,7 @@ class FactionEditController:
             self.asset_window.insert_to_table('cunning', self.asset_db.query(type='C'))
             self.asset_window.insert_to_table('wealth', self.asset_db.query(type='W'))
 
-    def change_asset_location_choices(self, filter):
+    def change_asset_location_choices(self, filter, ui):
         if not self.cur_asset:
             return
 
@@ -192,7 +192,7 @@ class FactionEditController:
                 for planet in star.planets:
                     relocation_choices.append(star.name + ' - ' + planet.name)
 
-        self.faction_ui.insert_asset_location_choices(self.cur_asset.get_location(), relocation_choices)
+        ui.insert_asset_location_choices(self.cur_asset.get_location(), relocation_choices)
 
     def create_boi_adder(self):
         self.boi_adder = BoIAdder.BoIAdder(self)
