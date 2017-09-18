@@ -136,18 +136,18 @@ class FactionEditController:
         self.update_faction_ui()
         self.show_assets()
 
-    def refit_choice_changed(self, name):
+    def refit_choice_changed(self, name, ui):
         if self.cur_asset is None:
             pass
         elif self.cur_asset.base_asset.cost == '*':
-            self.faction_ui.show_refit_cost('*')
+            ui.show_refit_cost('*')
         else:
             refit_asset = self.asset_db.query(name=name)[0]
             refit_cost = int(refit_asset.cost) - int(self.cur_asset.base_asset.cost)
             if refit_cost > 0:
-                self.faction_ui.show_refit_cost(refit_cost)
+                ui.show_refit_cost(refit_cost)
             else:
-                self.faction_ui.show_refit_cost(0)
+                ui.show_refit_cost(0)
 
     def delete_cur_asset(self):
         self.cur_faction.assets.remove(self.cur_asset)
