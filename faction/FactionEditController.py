@@ -37,6 +37,7 @@ class FactionEditController:
         if homeworld:
             self.cur_faction.homeworld = homeworld
         self.faction_controller.display_factions()
+        self.show_assets()
 
     def delete_current_faction(self):
         self.faction_controller.delete_faction(self.cur_faction)
@@ -114,10 +115,11 @@ class FactionEditController:
             print('No asset in list')
             return
         chosen_asset = self.cur_faction.get_asset_by_id(self.asset_treeview_index[index])
+        self.cur_asset = chosen_asset
         refit_names = [asset.get_name() for asset in self.asset_db.query(type=chosen_asset.base_asset.get_type())]
         self.faction_ui.set_asset_info(chosen_asset.get_name(), chosen_asset.get_location(), chosen_asset.cur_hp,
                                        refit_names, chosen_asset.get_relocation_choices())
-        self.cur_asset = chosen_asset
+
 
     def modify_asset(self, hp, location, refit_asset, refit_cost):
 
@@ -127,8 +129,7 @@ class FactionEditController:
         self.cur_asset.cur_hp = hp
         print(location[0])
         self.cur_asset.set_location(location)
-        self.show_assets()
-        if self.asset_db.query(name=refit_asset)[0] != self.cur_asset.base_asset:
+        if self.asset_db.query(name=refit_asset)[0] != self.cur_asset.base_asset and self.cur_asset.base_asset.cost != '*':
             # Refit is done
             if refit_cost <= self.cur_faction.fac_creds:
                 self.cur_faction.fac_creds = int(self.cur_faction.fac_creds) - int(refit_cost)

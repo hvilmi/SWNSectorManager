@@ -77,9 +77,6 @@ class FactionEditUI:
         self.asset_edit_ui = faction.assets.ui.asset_edit.AssetEditUI(self.asset_edit_frame, self.controller,
                                                                       self.controller.get_asset_world_list())
 
-        tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
-        tk.Button(self.asset_edit_frame, text='Delete Asset', command=self.asset_delete).grid(column=1, row=3)
-
         # Frame for faction actions
         action_frame = tk.LabelFrame(main_frame, text='Actions')
         action_frame.grid(column=7, row=5)
@@ -142,21 +139,6 @@ class FactionEditUI:
         self.controller.asset_chosen(self.asset_table.focus())
 
     ##############
-    def asset_save(self):
-        self.save_faction()
-        cur_values = self.asset_edit_ui.get_current_values()
-        self.controller.modify_asset(*cur_values)
-        self.save_faction()
-
-    # def show_refit_cost(self, cost):
-    #    self.refit_price.set(cost)
-
-    def asset_delete(self):
-        self.controller.delete_cur_asset()
-
-    # def location_filter_changed(self, *args):
-    #    self.controller.change_asset_location_choices(self.asset_location_filter_var.get())
-
     def insert_asset_location_choices(self, location, relocation_options):
 
         pass

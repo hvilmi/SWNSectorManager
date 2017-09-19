@@ -34,12 +34,15 @@ class AssetEditUI:
         self.refit_price.set('0')
         tk.Label(self.asset_edit_frame, textvariable=self.refit_price).grid(column=1, row=2)
 
+        tk.Button(self.asset_edit_frame, text='Save Asset', command=self.asset_save).grid(column=0, row=3)
+        tk.Button(self.asset_edit_frame, text='Delete Asset', command=self.asset_delete).grid(column=1, row=3)
+
     def get_asset(self):
         return [self.asset_hp_entry.get(), self.cur_asset_location.get(),
                 self.asset_refit_var.get(), self.refit_price.get()]
 
     def refit_change(self, *args):
-        print(self.asset_refit_var.get())
+        print("Refit debug", self.asset_refit_var.get())
         self.controller.refit_choice_changed(self.asset_refit_var.get(), self)
 
     def show_refit_cost(self, cost):
@@ -79,3 +82,16 @@ class AssetEditUI:
     def get_current_values(self):
         return [self.asset_hp_entry.get(), self.cur_asset_location.get(), self.asset_refit_var.get(),
                 self.refit_price.get()]
+
+    def asset_save(self):
+        self.controller.modify_asset(self.asset_hp_entry.get(), self.cur_asset_location.get(),
+                                     self.asset_refit_var.get(), self.refit_price.get())
+
+    # def show_refit_cost(self, cost):
+    #    self.refit_price.set(cost)
+
+    def asset_delete(self):
+        self.controller.delete_cur_asset()
+
+    # def location_filter_changed(self, *args):
+    #    self.controller.change_asset_location_choices(self.asset_location_filter_var.get())
