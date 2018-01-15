@@ -38,8 +38,6 @@ Project comes with a small example sector named 'test.sector'.
 
 * **Hannes Vilmi** - *Initial work* - [hvilmi](https://github.com/hvilmi)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
 ## License
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
